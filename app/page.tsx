@@ -79,6 +79,8 @@ const TURN_DURATIONS = [60, 120, 180, 300];
 
 // Unique id
 const uid = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const randomStartingPlayer = (playerCount: number) =>
+  Math.floor(Math.random() * playerCount);
 
 // 125 seconds -> "2:05"
 const formatTime = (seconds: number) =>
@@ -662,6 +664,7 @@ export default function App() {
       ...draft,
       title: draft.title.trim() || "Scrabble Game",
       players: draft.players.map((p, i) => ({ ...p, name: names[i] })),
+      current: randomStartingPlayer(draft.players.length),
       running: draft.mode === "Timed",
       lastTick: Date.now(),
     };
@@ -1336,6 +1339,7 @@ export default function App() {
         mode: game.mode,
         duration: game.duration,
         remaining: game.duration,
+        current: randomStartingPlayer(game.players.length),
         players: game.players.map((p, i) => ({
           ...p,
           id: uid(),
