@@ -102,7 +102,7 @@ const createFreshGame = (): Game => ({
   title: "Friday Night Scrabble",
   mode: "Timed",
   status: "active",
-  players: ["Paul Lang Sakalam"].map((name, i) => ({
+  players: ["player 1"].map((name, i) => ({
     id: uid(),
     name,
     color: COLORS[i],
