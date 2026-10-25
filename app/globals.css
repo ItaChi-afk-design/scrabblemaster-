@@ -713,6 +713,55 @@ label input,
   font-weight: 800;
 }
 
+.wordCheckerButton {
+  position: fixed;
+  z-index: 4;
+  right: 18px;
+  bottom: calc(82px + env(safe-area-inset-bottom));
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 1px solid #ead491;
+  border-radius: 999px;
+  background: #fffdf8;
+  box-shadow: 0 8px 24px #17352a33;
+  color: #315940;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.wordCheckerButton svg { width: 19px; }
+@media (max-width: 699px) { .wordCheckerButton { touch-action: none; overscroll-behavior: contain; user-select: none; -webkit-user-select: none; } }
+.wordCheckerLayer { position: fixed; z-index: 20; inset: 0; display: grid; align-items: end; background: #102a2270; }
+.wordCheckerSheet { width: min(480px, 100%); max-height: min(720px, calc(100svh - 18px)); margin: 0 auto; padding: 19px 20px calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; border: 1px solid var(--line); border-radius: 22px 22px 0 0; background: var(--paper); box-shadow: 0 -12px 42px #071c1455; }
+.wordCheckerHeader { display: flex; height: auto; align-items: center; justify-content: space-between; padding: 0 0 15px; color: var(--ink); }
+.wordCheckerHeader small, .wordCheckerLabel, .wordCheckerDefinition small, .wordCheckerVerdict small { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: 1.2px; }
+.wordCheckerHeader h2 { margin: 4px 0 0; font: 700 23px Georgia, serif; }
+.wordCheckerClose { display: grid; width: 39px; height: 39px; place-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); }
+.wordCheckerClose svg { width: 19px; }
+.wordCheckerLabel { display: block; margin: 11px 0 6px; }
+.wordCheckerInput, .wordCheckerSelect { width: 100%; min-height: 48px; padding: 0 13px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font-size: 16px; }
+.wordCheckerSubmit { display: flex; width: 100%; min-height: 51px; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; border: 0; border-radius: 13px; background: var(--gold); color: #2d260f; font-weight: 800; }
+.wordCheckerSubmit:disabled { opacity: .65; cursor: wait; }
+.wordCheckerSubmit svg { width: 19px; }
+.spinning { animation: wordCheckerSpin .8s linear infinite; }
+.wordCheckerError { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding: 12px; border: 1px solid #edc5b9; border-radius: 12px; background: #fff0e9; color: #934333; font-size: 13px; line-height: 1.35; }
+.wordCheckerError button { display: flex; align-items: center; gap: 4px; border: 0; background: none; color: inherit; font-weight: 800; }
+.wordCheckerError svg { width: 15px; }
+.wordCheckerResults { margin-top: 15px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: #f9f8f2; }
+.wordCheckerResults > p { margin: 0 0 10px; color: #51645a; font-size: 13px; }
+.wordCheckerVerdict { display: flex; align-items: center; gap: 9px; padding: 10px 0; border-top: 1px solid #e7e0d3; }
+.wordCheckerVerdict > span { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 50%; }
+.wordCheckerVerdict.valid > span { background: #dcebdd; color: #397047; }.wordCheckerVerdict.invalid > span { background: #f9e1dc; color: #a84e3e; }
+.wordCheckerVerdict svg { width: 17px; }.wordCheckerVerdict b { display: block; margin-top: 2px; font-size: 14px; }
+.wordCheckerDefinition { margin-top: 6px; padding-top: 11px; border-top: 1px solid #e7e0d3; }.wordCheckerDefinition p { margin: 5px 0 0; color: #52645a; font-size: 13px; line-height: 1.45; }
+.wordCheckerNote { margin: 14px 2px 0; color: var(--muted); font-size: 11px; line-height: 1.4; text-align: center; }
+@keyframes wordCheckerSpin { to { transform: rotate(360deg); } }
+
+@media (min-width: 700px) { .wordCheckerLayer { align-items: center; padding: 24px; }.wordCheckerSheet { max-height: calc(100svh - 48px); border-radius: 22px; }.wordCheckerButton { right: max(24px, calc((100vw - 960px) / 2)); bottom: 24px; } }
+
 .finishDialog {
   position: fixed;
   inset: 0;

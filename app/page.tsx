@@ -18,6 +18,7 @@ import {
   Trophy,
   X,
 } from "lucide-react";
+import { WordChecker } from "./word-checker";
 
 /* ============================================================
    TYPES
@@ -1125,6 +1126,7 @@ export default function App() {
           >
             Finish game
           </button>
+          <WordChecker />
         </section>
 
         <dialog
