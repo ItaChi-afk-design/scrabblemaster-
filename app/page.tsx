@@ -17,6 +17,7 @@ import {
   Trophy,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import { WordChecker } from "./word-checker";
 import { readStoredJson, removeStoredValue, writeStoredJson } from "./lib/browser-storage";
 
@@ -28,6 +29,7 @@ type Player = {
   id: string;
   name: string;
   color: string;
+  avatarUrl?: string;
   score: number;
 };
 
@@ -76,11 +78,33 @@ type View =
 
 const STORAGE_KEY = "scrabble-score-v2";
 const COLORS = ["#c66551", "#4b927f", "#c89835", "#6e79b5", "#a35c91"];
+const MAX_PLAYERS = 7;
+const ANIMAL_AVATARS = [
+  "https://images.unsplash.com/photo-1552053831-71594a27632d",
+  "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+  "https://images.unsplash.com/photo-1474511320723-9a56873867b5",
+  "https://images.unsplash.com/photo-1564760055775-d63b17a55c44",
+  "https://images.unsplash.com/photo-1546182990-dffeafbe841d",
+  "https://images.unsplash.com/photo-1551986782-d0169b3f8fa7",
+  "https://images.unsplash.com/photo-1484406566174-9da000fda645",
+] as const;
 const TURN_DURATIONS = [60, 120, 180, 300];
 const getCurrentTime = () => Date.now();
 
 // Unique id
 const uid = (now: number) => `${now}-${Math.random().toString(36).slice(2)}`;
+const getAnimalAvatar = (player: Player) =>
+  player.avatarUrl ??
+  ANIMAL_AVATARS[
+    [...player.id].reduce((sum, character) => sum + character.charCodeAt(0), 0) %
+      ANIMAL_AVATARS.length
+  ];
+const getRandomAnimalAvatar = (players: Player[] = []) => {
+  const assigned = new Set(players.map(getAnimalAvatar));
+  const available = ANIMAL_AVATARS.filter((avatar) => !assigned.has(avatar));
+  const choices = available.length ? available : ANIMAL_AVATARS;
+  return choices[Math.floor(Math.random() * choices.length)];
+};
 const randomStartingPlayer = (playerCount: number) =>
   Math.floor(Math.random() * playerCount);
 
@@ -88,7 +112,6 @@ const randomStartingPlayer = (playerCount: number) =>
 const formatTime = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
-// "Alex Morgan" -> "AM"
 const getInitials = (name: string) =>
   name
     .split(" ")
@@ -108,6 +131,7 @@ const createFreshGame = (now: number): Game => ({
     id: uid(now),
     name,
     color: COLORS[i],
+    avatarUrl: getRandomAnimalAvatar(),
     score: 0,
   })),
   current: 0,
@@ -129,8 +153,20 @@ const initialDraft: Game = {
   mode: "Timed",
   status: "active",
   players: [
-    { id: "draft-1", name: "Alex Morgan", color: COLORS[0], score: 0 },
-    { id: "draft-2", name: "Jamie Lee", color: COLORS[1], score: 0 },
+    {
+      id: "draft-1",
+      name: "Alex Morgan",
+      color: COLORS[0],
+      avatarUrl: ANIMAL_AVATARS[0],
+      score: 0,
+    },
+    {
+      id: "draft-2",
+      name: "Jamie Lee",
+      color: COLORS[1],
+      avatarUrl: ANIMAL_AVATARS[1],
+      score: 0,
+    },
   ],
   current: 0,
   duration: 180,
@@ -152,6 +188,9 @@ const isPlayer = (value: unknown): value is Player =>
   typeof value.id === "string" &&
   typeof value.name === "string" &&
   typeof value.color === "string" &&
+  (value.avatarUrl === undefined ||
+    (typeof value.avatarUrl === "string" &&
+      ANIMAL_AVATARS.some((avatar) => avatar === value.avatarUrl))) &&
   typeof value.score === "number" &&
   Number.isFinite(value.score);
 
@@ -230,9 +269,24 @@ function tickTimedGame(game: Game, now: number): Game {
    ============================================================ */
 
 function Avatar({ p, small = false }: { p: Player; small?: boolean }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
   return (
-    <i className={small ? "avatar small" : "avatar"} style={{ background: p.color }}>
-      {getInitials(p.name)}
+    <i
+      className={small ? "avatar small" : "avatar"}
+      style={{ background: p.color, borderColor: p.color }}
+    >
+      {imageFailed ? (
+        getInitials(p.name)
+      ) : (
+        <Image
+          src={getAnimalAvatar(p)}
+          alt={`${p.name}'s animal avatar`}
+          width={small ? 27 : 38}
+          height={small ? 27 : 38}
+          onError={() => setImageFailed(true)}
+        />
+      )}
     </i>
   );
 }
@@ -664,6 +718,9 @@ export default function App() {
     if (draft.players.length === 0) {
       return setError("Add at least one player to start a game.");
     }
+    if (draft.players.length > MAX_PLAYERS) {
+      return setError(`A game can have up to ${MAX_PLAYERS} players.`);
+    }
 
     const names = draft.players.map((p) => p.name.trim());
     const hasEmptyName = names.some((n) => !n);
@@ -866,7 +923,7 @@ export default function App() {
           {/* Players */}
           <div className="line">
             <p>PLAYERS</p>
-            <small>{draft.players.length} / 5</small>
+            <small>{draft.players.length} / {MAX_PLAYERS}</small>
           </div>
 
           {draft.players.map((p, i) => (
@@ -899,7 +956,7 @@ export default function App() {
             </div>
           ))}
 
-          {draft.players.length < 5 && (
+          {draft.players.length < MAX_PLAYERS && (
             <button
               className="addPlayer"
               onClick={() =>
@@ -911,6 +968,7 @@ export default function App() {
                       id: uid(Date.now()),
                       name: `Player ${draft.players.length + 1}`,
                       color: COLORS[draft.players.length % COLORS.length],
+                      avatarUrl: getRandomAnimalAvatar(draft.players),
                       score: 0,
                     },
                   ],

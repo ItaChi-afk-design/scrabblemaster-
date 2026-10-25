@@ -386,6 +386,7 @@ label input,
 }
 
 .avatar {
+  overflow: hidden;
   display: grid;
   width: 38px;
   height: 38px;
@@ -397,6 +398,14 @@ label input,
   font-size: 11px;
   font-style: normal;
   font-weight: 800;
+}
+
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .avatar.small {
@@ -1005,7 +1014,36 @@ label input,
 }
 
 .leaderboardRow.current {
-  background: linear-gradient(90deg, #edf4ed, #fbfcf8);
+  width: calc(100% - 12px);
+  margin: 6px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  --active-player-angle: 0deg;
+  background:
+    linear-gradient(90deg, #edf4ed, #fbfcf8) padding-box,
+    conic-gradient(from var(--active-player-angle),
+      #ff4d6d,
+      #ffae42,
+      #f9f871,
+      #53e6a5,
+      #40c9ff,
+      #9b6bff,
+      #ff4dca,
+      #ff4d6d
+    ) border-box;
+  animation: active-player-orbit 2.4s linear infinite;
+}
+
+@property --active-player-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes active-player-orbit {
+  to {
+    --active-player-angle: 360deg;
+  }
 }
 
 .leaderboardRank {
