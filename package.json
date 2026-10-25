@@ -2,11 +2,13 @@
   "name": "scrabblemaster",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --experimental-strip-types --test tests/community-dictionary.test.ts"
   },
   "dependencies": {
     "lucide-react": "^1.59.0",

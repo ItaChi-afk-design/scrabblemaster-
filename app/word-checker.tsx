@@ -2,9 +2,10 @@
 
 import { BookOpen, Check, LoaderCircle, RotateCcw, X } from "lucide-react";
 import { FormEvent, PointerEvent, useEffect, useRef, useState } from "react";
+import { isCurrentRequest } from "./lib/request-guard";
 
-type Dictionary = "nwl" | "csw" | "both";
-type DictionaryResult = { id: "nwl" | "csw"; label: string; valid: boolean };
+type Dictionary = "community" | "nwl" | "csw" | "both";
+type DictionaryResult = { id: "community"; label: string; valid: boolean };
 type CheckResult = {
   status: "ok";
   outcome: "valid" | "invalid" | "checked";
@@ -46,7 +47,7 @@ const getSavedFloatingPosition = (): FloatingPosition => {
 export function WordChecker() {
   const [open, setOpen] = useState(false);
   const [word, setWord] = useState("");
-  const [dictionary, setDictionary] = useState<Dictionary>("both");
+  const [dictionary, setDictionary] = useState<Dictionary>("community");
   const [result, setResult] = useState<CheckResult | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -78,9 +79,13 @@ export function WordChecker() {
   const check = async (event?: FormEvent) => {
     event?.preventDefault();
     const normalized = word.trim().toLowerCase();
-    if (!/^[a-z]+$/.test(normalized)) {
+    if (!/^[a-z]+$/.test(normalized) || normalized.length > 32) {
+      abortController.current?.abort();
+      requestId.current += 1;
+      pendingKey.current = null;
+      setLoading(false);
       setResult(null);
-      setError("Enter one word using letters A–Z.");
+      setError("Enter one word using letters A-Z (up to 32 letters).");
       return;
     }
 
@@ -111,13 +116,13 @@ export function WordChecker() {
       }
       const checked = payload && typeof payload === "object" && (payload as CheckResult).status === "ok" ? payload as CheckResult : null;
       if (!checked) throw new Error("The dictionary service returned an unexpected response. Your word has not been verified.");
-      if (id === requestId.current) setResult(checked);
+      if (isCurrentRequest(id, requestId.current)) setResult(checked);
     } catch (caught) {
-      if (id === requestId.current && !(caught instanceof DOMException && caught.name === "AbortError")) {
+      if (isCurrentRequest(id, requestId.current) && !(caught instanceof DOMException && caught.name === "AbortError")) {
         setError(caught instanceof Error ? caught.message : "Could not check that word.");
       }
     } finally {
-      if (id === requestId.current) { setLoading(false); pendingKey.current = null; }
+      if (isCurrentRequest(id, requestId.current)) { setLoading(false); pendingKey.current = null; }
     }
   };
 
@@ -209,12 +214,20 @@ export function WordChecker() {
             </header>
             <form onSubmit={check}>
               <label className="wordCheckerLabel" htmlFor="word-to-check">WORD</label>
-              <input id="word-to-check" className="wordCheckerInput" autoFocus autoCapitalize="none" autoCorrect="off" spellCheck={false} value={word} onChange={(event) => setWord(event.target.value.replace(/[^a-zA-Z]/g, ""))} placeholder="Enter a word" />
+              <input id="word-to-check" className="wordCheckerInput" autoFocus autoCapitalize="none" autoCorrect="off" spellCheck={false} maxLength={32} value={word} onChange={(event) => {
+                abortController.current?.abort();
+                requestId.current += 1;
+                pendingKey.current = null;
+                setLoading(false);
+                setResult(null);
+                setError("");
+                setWord(event.target.value);
+              }} placeholder="Enter a word" />
               <label className="wordCheckerLabel" htmlFor="dictionary">DICTIONARY</label>
-              <select id="dictionary" className="wordCheckerSelect" value={dictionary} onChange={(event) => { abortController.current?.abort(); requestId.current += 1; setLoading(false); setDictionary(event.target.value as Dictionary); }}>
-                <option value="nwl">US Scrabble (NWL2023)</option>
-                <option value="csw">International (CSW24)</option>
-                <option value="both">Compare both dictionaries</option>
+              <select id="dictionary" className="wordCheckerSelect" value={dictionary} onChange={(event) => { abortController.current?.abort(); requestId.current += 1; setLoading(false); setResult(null); setError(""); setDictionary(event.target.value as Dictionary); }}>
+                <option value="community">Community (ENABLE2K)</option>
+                <option value="nwl" disabled>NWL2023 (unavailable)</option>
+                <option value="csw" disabled>CSW24 (unavailable)</option>
               </select>
               <button className="wordCheckerSubmit" disabled={loading} type="submit">
                 {loading ? <><LoaderCircle className="spinning" /> Checking…</> : <><BookOpen /> Check word</>}
@@ -228,7 +241,7 @@ export function WordChecker() {
               </div>)}
               <div className="wordCheckerDefinition"><small>DEFINITION</small><p>{result.definition ?? "A definition is unavailable for this word."}</p></div>
             </div>}
-            <p className="wordCheckerNote">Checks do not change scores, turns, or the timer.</p>
+            <p className="wordCheckerNote">Community (ENABLE2K) is a nonofficial public-domain word list and may differ from tournament word lists. <a href="https://github.com/BartMassey/wordlists/blob/main/README-enable2k.txt" target="_blank" rel="noreferrer">Source and notice</a></p>
           </section>
         </div>
       )}

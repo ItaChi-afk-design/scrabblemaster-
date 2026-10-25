@@ -1,57 +1,109 @@
-const UPSTREAM = "https://scrabble-checker.com/api/word/";
+import { COMMUNITY_DICTIONARY, communityDictionary, normalizeWord } from "../../../lib/community-dictionary.ts";
+import { WordResultCache } from "../../../lib/word-result-cache.ts";
+
 const CACHE_TTL_MS = positiveEnv("WORD_CHECK_CACHE_TTL_MS", 5 * 60_000);
-const DEFAULT_COOLDOWN_MS = positiveEnv("WORD_CHECK_COOLDOWN_MS", 30_000);
-const REQUEST_TIMEOUT_MS = positiveEnv("WORD_CHECK_TIMEOUT_MS", 8_000);
+const CACHE_CAPACITY = 1_000;
 
-type Dictionary = "nwl" | "csw" | "both";
-type ProviderResult = { word: string; dictionaries: { id: "nwl" | "csw"; label: string; valid: boolean }[]; definition: string | null; points: number | null };
-const cache = new Map<string, { result: ProviderResult; expiresAt: number }>();
-const inFlight = new Map<string, Promise<Response>>();
-let cooldownUntil = 0;
+type Dictionary = "community" | "nwl" | "csw" | "both";
+type DictionaryResult = { id: "community"; label: string; valid: boolean };
+type LookupResult = { word: string; dictionaries: DictionaryResult[]; definition: null; points: null };
+type WordRouteContext = { params: Promise<{ word: string }> };
+type WordRouteDependencies = {
+  dictionary: typeof communityDictionary;
+  cache: WordResultCache<LookupResult>;
+  now: () => number;
+};
+const dependencies: WordRouteDependencies = {
+  dictionary: communityDictionary,
+  cache: new WordResultCache(CACHE_CAPACITY, CACHE_TTL_MS),
+  now: Date.now,
+};
 
-function positiveEnv(name: string, fallback: number) { const value = Number(process.env[name]); return Number.isFinite(value) && value > 0 ? value : fallback; }
-function retryAfterMs(value: string | null) { const seconds = Number(value); if (Number.isFinite(seconds) && seconds >= 0) return Math.min(seconds * 1_000, 15 * 60_000); const date = value ? Date.parse(value) : NaN; return Number.isFinite(date) ? Math.min(Math.max(0, date - Date.now()), 15 * 60_000) : DEFAULT_COOLDOWN_MS; }
-function rateLimited() { const retryAfterSeconds = Math.max(1, Math.ceil((cooldownUntil - Date.now()) / 1_000)); return Response.json({ status: "rate_limited", error: "Too many checks right now. Please wait a moment and try again.", retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }); }
-function valid(value: unknown): boolean | null { if (typeof value === "boolean") return value; if (!value || typeof value !== "object") return null; const record = value as Record<string, unknown>; const candidate = record.valid ?? record.validity; return typeof candidate === "boolean" ? candidate : null; }
-function parse(word: string, value: unknown): ProviderResult | null { if (!value || typeof value !== "object") return null; const data = value as Record<string, unknown>; const nwl = valid(data.nwl2023 ?? data.nwl ?? data.NWL2023); const csw = valid(data.csw24 ?? data.csw ?? data.CSW24); if (nwl === null || csw === null) return null; const definition = typeof data.definition === "string" && data.definition.trim() ? data.definition.trim() : Array.isArray(data.definitions) ? data.definitions.filter((item): item is string => typeof item === "string" && Boolean(item.trim())).join("; ") || null : null; return { word, dictionaries: [{ id: "nwl", label: "US Scrabble (NWL2023)", valid: nwl }, { id: "csw", label: "International (CSW24)", valid: csw }], definition, points: typeof data.points === "number" && Number.isFinite(data.points) ? data.points : null }; }
-function success(result: ProviderResult, dictionary: Dictionary, cached = false) { const dictionaries = dictionary === "both" ? result.dictionaries : result.dictionaries.filter((item) => item.id === dictionary); const outcome = dictionaries.every((item) => item.valid) ? "valid" : dictionaries.every((item) => !item.valid) ? "invalid" : "checked"; return Response.json({ status: "ok", outcome, ...result, dictionaries, cached }); }
+function positiveEnv(name: string, fallback: number) {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+}
 
-export async function GET(request: Request, context: RouteContext<"/api/word/[word]">) {
-  const { word } = await context.params;
-  const normalized = decodeURIComponent(word).trim().toLowerCase();
+function success(result: LookupResult, cached = false) {
+  const valid = result.dictionaries.every((item) => item.valid);
+  return Response.json({ status: "ok", outcome: valid ? "valid" : "invalid", ...result, cached });
+}
 
-  const selection = new URL(request.url).searchParams.get("dictionary");
-  const dictionary: Dictionary = selection === "nwl" || selection === "csw" || selection === "both" ? selection : "both";
-  if (!/^[a-z]+$/.test(normalized) || normalized.length > 32) return Response.json({ status: "invalid_request", error: "Enter one word using letters A–Z." }, { status: 400 });
-  const key = `${dictionary}:${normalized}`;
-  const cached = cache.get(key);
-  if (cached && cached.expiresAt > Date.now()) return success(cached.result, dictionary, true);
-  if (cached) cache.delete(key);
-  if (Date.now() < cooldownUntil) return rateLimited();
-  const active = inFlight.get(key);
-  if (active) return active.then((response) => response.clone());
+function unavailable(dictionary: Exclude<Dictionary, "community">) {
+  const name = dictionary === "nwl" ? "NWL2023" : dictionary === "csw" ? "CSW24" : "NWL2023 and CSW24";
+  return Response.json({
+    status: "dictionary_unavailable",
+    error: `${name} is unavailable because no authorized, compatible source is configured. Your word has not been verified against an official dictionary.`,
+  }, { status: 503 });
+}
 
-  const work = (async () => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+export function createGetHandler(
+  { dictionary: dictionaryStore, cache: resultCache, now }: WordRouteDependencies = dependencies,
+) {
+  const inFlight = new Map<string, Promise<Response>>();
+
+  return async function GET(request: Request, context: WordRouteContext) {
+    const { word } = await context.params;
+    const normalized = normalizeWord(word);
+    const selection = new URL(request.url).searchParams.get("dictionary");
+    const dictionary: Dictionary | null = selection === null || selection === "community"
+      ? "community"
+      : selection === "nwl" || selection === "csw" || selection === "both" ? selection : null;
+
+    if (!normalized) {
+      return Response.json({ status: "invalid_request", error: "Enter one word using letters A-Z." }, { status: 400 });
+    }
+    if (!dictionary) {
+      return Response.json({ status: "invalid_request", error: "Choose a supported dictionary mode." }, { status: 400 });
+    }
+    if (dictionary !== "community") return unavailable(dictionary);
+
+    const key = `${COMMUNITY_DICTIONARY.id}:${normalized}`;
+    const cached = resultCache.get(key, now());
+    if (cached) return success(cached, true);
+    const active = inFlight.get(key);
+    if (active) return active.then((response) => response.clone());
+
+    const work = (async () => {
+      try {
+        const lookup = dictionaryStore.lookup(normalized);
+        if (!lookup.available) {
+          return Response.json({
+            status: "unavailable",
+            error: "The Community Dictionary (ENABLE2K) is temporarily unavailable. Your word has not been verified.",
+          }, { status: 503 });
+        }
+        const result: LookupResult = {
+          word: normalized,
+          dictionaries: [{ ...COMMUNITY_DICTIONARY, valid: lookup.valid }],
+          definition: null,
+          points: null,
+        };
+        resultCache.set(key, result, now());
+        return success(result);
+      } catch {
+        return Response.json({
+          status: "unavailable",
+          error: "The Community Dictionary (ENABLE2K) is temporarily unavailable. Your word has not been verified.",
+        }, { status: 503 });
+      }
+    })();
+    inFlight.set(key, work);
     try {
-    const upstream = await fetch(`${UPSTREAM}${encodeURIComponent(normalized)}`, {
-      headers: { Accept: "application/json" },
-      signal: controller.signal,
-      cache: "no-store",
-    });
-      if (upstream.status === 429) { cooldownUntil = Math.max(cooldownUntil, Date.now() + retryAfterMs(upstream.headers.get("Retry-After"))); return rateLimited(); }
-      const body: unknown = await upstream.json().catch(() => null);
-      if (!upstream.ok) return Response.json({ status: "provider_error", error: "The dictionary service is temporarily unavailable. Your word has not been verified." }, { status: 502 });
-      const result = parse(normalized, body);
-      if (!result) return Response.json({ status: "provider_error", error: "The dictionary service returned an unexpected response. Your word has not been verified." }, { status: 502 });
-      cache.set(key, { result, expiresAt: Date.now() + CACHE_TTL_MS });
-      return success(result, dictionary);
-    } catch (error) {
-      const message = error instanceof DOMException && error.name === "AbortError" ? "The dictionary service is temporarily unavailable. Your word has not been verified." : "Couldn't reach the dictionary service. Check your connection and try again.";
-      return Response.json({ status: "unavailable", error: message }, { status: 503 });
-    } finally { clearTimeout(timeout); }
-  })();
-  inFlight.set(key, work);
-  try { return await work; } finally { inFlight.delete(key); }
+      return await work;
+    } finally {
+      inFlight.delete(key);
+    }
+  };
+}
+
+export const GET = createGetHandler();
+
+export async function HEAD(request: Request, context: WordRouteContext) {
+  const response = await GET(request, context);
+  return new Response(null, { status: response.status, statusText: response.statusText, headers: response.headers });
+}
+
+export function OPTIONS() {
+  return new Response(null, { status: 204, headers: { Allow: "GET, HEAD, OPTIONS" } });
 }

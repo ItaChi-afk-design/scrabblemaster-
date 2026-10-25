@@ -758,6 +758,8 @@ label input,
 .wordCheckerVerdict svg { width: 17px; }.wordCheckerVerdict b { display: block; margin-top: 2px; font-size: 14px; }
 .wordCheckerDefinition { margin-top: 6px; padding-top: 11px; border-top: 1px solid #e7e0d3; }.wordCheckerDefinition p { margin: 5px 0 0; color: #52645a; font-size: 13px; line-height: 1.45; }
 .wordCheckerNote { margin: 14px 2px 0; color: var(--muted); font-size: 11px; line-height: 1.4; text-align: center; }
+.wordCheckerNote + .wordCheckerNote { margin-top: 7px; }
+.wordCheckerNote a { color: #426d56; font-weight: 800; text-decoration: underline; }
 @keyframes wordCheckerSpin { to { transform: rotate(360deg); } }
 
 @media (min-width: 700px) { .wordCheckerLayer { align-items: center; padding: 24px; }.wordCheckerSheet { max-height: calc(100svh - 48px); border-radius: 22px; }.wordCheckerButton { right: max(24px, calc((100vw - 960px) / 2)); bottom: 24px; } }

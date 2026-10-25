@@ -15,16 +15,24 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Word checker configuration
 
-The server-side word-check route uses a process-local success cache and a shared
-rate-limit cooldown. These optional environment variables are milliseconds:
+The server-side word-check route includes the ENABLE2K dictionary in the build
+and uses a process-local least-recently-used success cache (1,000 entries, five
+minutes per result). These optional environment variables are milliseconds:
 
 - `WORD_CHECK_CACHE_TTL_MS` (default `300000`)
-- `WORD_CHECK_COOLDOWN_MS` (default `30000` when the provider supplies no `Retry-After`)
-- `WORD_CHECK_TIMEOUT_MS` (default `8000`)
 
-The cache is intentionally not persistent or shared between Render instances;
-it reduces duplicate calls within one running instance only. Configure the same
-variables in Render's Environment page if you need non-default values.
+The cache is not persistent or shared between Render instances; it only reduces
+duplicate work within one running instance. The checker performs local dictionary
+lookups and does not call an external service. No distributed API rate limiter is
+configured. Any process-local limit would apply independently to each Render
+instance and must not be treated as a multi-instance protection. A no-cost option
+for small deployments is to add a per-instance request limit; for shared
+multi-instance enforcement, place a rate-limiting reverse proxy or gateway in
+front of the service.
+
+Baseline security headers are configured globally. A Content Security Policy is
+not enabled yet: the app's production hydration and style behavior should first
+be assessed in report-only mode before enforcing a policy.
 
 ## Deploy on Render
 
@@ -34,9 +42,11 @@ Create a **Web Service** in Render and connect this GitHub repository. Use:
 - **Runtime:** Node
 - **Build command:** `npm ci && npm run build`
 - **Start command:** `npm start`
+- **Node version:** `22.22.0` (pinned in `.node-version`; supported by Next.js 16)
 
-Set any non-default `WORD_CHECK_*` variables in the service's Environment
-settings, then deploy normally. No database or paid cache service is required.
+Set `WORD_CHECK_CACHE_TTL_MS` only if a non-default cache lifetime is needed.
+No database or paid cache service is required. The packaged dictionary is
+included via Next.js output file tracing at `app/data/enable2k.txt.gz`.
 
 Render will provide a public URL for the running app and can automatically
 deploy future commits pushed to `main`.

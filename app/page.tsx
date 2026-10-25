@@ -14,11 +14,11 @@ import {
   Plus,
   RotateCcw,
   Settings,
-  TriangleAlert,
   Trophy,
   X,
 } from "lucide-react";
 import { WordChecker } from "./word-checker";
+import { readStoredJson, removeStoredValue, writeStoredJson } from "./lib/browser-storage";
 
 /* ============================================================
    TYPES
@@ -77,9 +77,10 @@ type View =
 const STORAGE_KEY = "scrabble-score-v2";
 const COLORS = ["#c66551", "#4b927f", "#c89835", "#6e79b5", "#a35c91"];
 const TURN_DURATIONS = [60, 120, 180, 300];
+const getCurrentTime = () => Date.now();
 
 // Unique id
-const uid = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const uid = (now: number) => `${now}-${Math.random().toString(36).slice(2)}`;
 const randomStartingPlayer = (playerCount: number) =>
   Math.floor(Math.random() * playerCount);
 
@@ -98,13 +99,13 @@ const getInitials = (name: string) =>
     .toUpperCase() || "?";
 
 // Creates a brand new default game
-const createFreshGame = (): Game => ({
-  id: uid(),
+const createFreshGame = (now: number): Game => ({
+  id: uid(now),
   title: "Friday Night Scrabble",
   mode: "Timed",
   status: "active",
   players: ["player 1"].map((name, i) => ({
-    id: uid(),
+    id: uid(now),
     name,
     color: COLORS[i],
     score: 0,
@@ -113,12 +114,12 @@ const createFreshGame = (): Game => ({
   duration: 180,
   remaining: 180,
   running: false,
-  lastTick: Date.now(),
+  lastTick: now,
   events: [],
   undo: true,
   differences: true,
   vibration: true,
-  created: new Date().toISOString(),
+  created: new Date(now).toISOString(),
 });
 
 // Initial value for the "New game" form (no Date.now/uid so it's stable on first render)
@@ -376,6 +377,7 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
+  const storageWarningShown = useRef(false);
 
   /* ---------- Derived values & refs ---------- */
   const game = games.find((g) => g.id === selected);
@@ -505,50 +507,59 @@ export default function App() {
 
   // Load saved games from localStorage on first render
   useEffect(() => {
-    try {
-      const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      if (!Array.isArray(saved)) {
-        setGames([]);
-        setToast("Saved games had an invalid format and couldn't be loaded.");
-      } else {
-        let repaired = 0;
-        let skipped = 0;
-        const loadedGames = saved.flatMap((entry): Game[] => {
-          if (!isGame(entry)) {
-            skipped += 1;
-            return [];
-          }
-
-          const current =
-            Number.isInteger(entry.current)
-              ? ((entry.current % entry.players.length) + entry.players.length) %
-                entry.players.length
-              : 0;
-          if (current !== entry.current) repaired += 1;
-
-          return [{ ...entry, current }];
-        });
-        setGames(loadedGames);
-        if (repaired || skipped) {
-          setToast(
-            `${repaired ? "A saved game's turn was reset. " : ""}${
-              skipped ? `${skipped} invalid saved game${skipped === 1 ? "" : "s"} skipped.` : ""
-            }`.trim(),
-          );
+    const getStorage = () => window.localStorage;
+    const loaded = readStoredJson(getStorage, STORAGE_KEY, (value): value is unknown[] => Array.isArray(value));
+    if (loaded.status === "ok") {
+      const saved = loaded.value ?? [];
+      let repaired = 0;
+      let skipped = 0;
+      const loadedGames = saved.flatMap((entry): Game[] => {
+        if (!isGame(entry)) {
+          skipped += 1;
+          return [];
         }
+
+        const current =
+          Number.isInteger(entry.current)
+            ? ((entry.current % entry.players.length) + entry.players.length) %
+              entry.players.length
+            : 0;
+        if (current !== entry.current) repaired += 1;
+
+        return [{ ...entry, current }];
+      });
+      setGames(loadedGames);
+      if (repaired || skipped) {
+        setToast(
+          `${repaired ? "A saved game's turn was reset. " : ""}${
+            skipped ? `${skipped} invalid saved game${skipped === 1 ? "" : "s"} skipped.` : ""
+          }`.trim(),
+        );
       }
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
-      setGames([]);
-      setToast("Saved games couldn't be read and were cleared.");
+    } else if (loaded.status === "corrupt") {
+      const removed = removeStoredValue(getStorage, STORAGE_KEY);
+      storageWarningShown.current = true;
+      setToast(removed
+        ? "Saved games were damaged and couldn't be loaded."
+        : "Saved games were damaged and couldn't be cleared.");
+    } else {
+      storageWarningShown.current = true;
+      setToast("Browser storage is unavailable; game changes are kept in memory and won't persist after this tab closes.");
     }
     setReady(true);
   }, []);
 
   // Save games to localStorage whenever they change
   useEffect(() => {
-    if (ready) localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
-  }, [games, ready]);
+    if (!ready) return;
+    const written = writeStoredJson(() => window.localStorage, STORAGE_KEY, games);
+    if (!written && !storageWarningShown.current) {
+      storageWarningShown.current = true;
+      say("Browser storage is unavailable; game changes are kept in memory and won't persist after this tab closes.");
+    } else if (written) {
+      storageWarningShown.current = false;
+    }
+  }, [games, ready, say]);
 
   // Turn countdown: runs every second while a timed game is running
   useEffect(() => {
@@ -598,6 +609,7 @@ export default function App() {
     const pauseUntil = game.pauseUntil;
     const timeout = window.setTimeout(
       () => {
+        const now = Date.now();
         patch(game.id, (g) =>
           g.pauseUntil !== pauseUntil
             ? g
@@ -606,7 +618,7 @@ export default function App() {
                 current: (g.current + 1) % g.players.length,
                 remaining: g.duration,
                 running: true,
-                lastTick: Date.now(),
+                lastTick: now,
                 pauseUntil: undefined,
               },
         );
@@ -648,7 +660,7 @@ export default function App() {
   };
 
   // Validate the "New game" form and start the game
-  const start = () => {
+  const start = (now: number) => {
     if (draft.players.length === 0) {
       return setError("Add at least one player to start a game.");
     }
@@ -667,7 +679,7 @@ export default function App() {
       players: draft.players.map((p, i) => ({ ...p, name: names[i] })),
       current: randomStartingPlayer(draft.players.length),
       running: draft.mode === "Timed",
-      lastTick: Date.now(),
+      lastTick: now,
     };
 
     setGames((list) => [newGame, ...list]);
@@ -675,18 +687,18 @@ export default function App() {
   };
 
   // Add points for the current player, then pass the turn
-  const addScore = (points: number) => {
+  const addScore = (points: number, now: number) => {
     if (!game || !Number.isFinite(points) || !points) return;
 
     patch(game.id, (g) => {
       const player = g.players[g.current];
       const event: Event = {
-        id: uid(),
+        id: uid(now),
         playerId: player.id,
         points,
         previous: player.score,
         next: player.score + points,
-        at: new Date().toISOString(),
+        at: new Date(now).toISOString(),
       };
 
       return {
@@ -695,7 +707,7 @@ export default function App() {
         events: [...g.events, event],
         current: (g.current + 1) % g.players.length,
         remaining: g.duration,
-        lastTick: Date.now(),
+        lastTick: now,
       };
     });
 
@@ -703,8 +715,23 @@ export default function App() {
     setInput("");
   };
 
+  const adjustTimer = (delta: number) => {
+    if (!game || game.mode !== "Timed" || game.status !== "active") return;
+
+    const now = Date.now();
+    const nextRemaining = Math.max(0, game.remaining + delta);
+
+    save({
+      ...game,
+      remaining: nextRemaining,
+      lastTick: now,
+      pauseUntil: nextRemaining === 0 && game.running ? now + 2000 : undefined,
+      running: game.running && nextRemaining > 0,
+    });
+  };
+
   // Undo the most recent score that hasn't already been undone
-  const undoLastScore = () => {
+  const undoLastScore = (now: number) => {
     if (!game) return;
 
     const lastEvent = [...game.events].reverse().find((e) => !e.undone);
@@ -718,7 +745,7 @@ export default function App() {
       current: g.players.findIndex((p) => p.id === lastEvent.playerId),
       events: [
         ...g.events,
-        { ...lastEvent, id: uid(), undone: true, at: new Date().toISOString() },
+        { ...lastEvent, id: uid(now), undone: true, at: new Date(now).toISOString() },
       ],
     }));
 
@@ -726,7 +753,7 @@ export default function App() {
   };
 
   const newGame = () => {
-    setDraft(createFreshGame());
+    setDraft(createFreshGame(Date.now()));
     setError("");
     setView("create");
   };
@@ -881,7 +908,7 @@ export default function App() {
                   players: [
                     ...draft.players,
                     {
-                      id: uid(),
+                      id: uid(Date.now()),
                       name: `Player ${draft.players.length + 1}`,
                       color: COLORS[draft.players.length % COLORS.length],
                       score: 0,
@@ -943,7 +970,7 @@ export default function App() {
 
           {error && <div className="error">{error}</div>}
 
-          <button className="primary" onClick={start}>
+          <button className="primary" onClick={() => start(getCurrentTime())}>
             Start game <ChevronRight />
           </button>
         </section>
@@ -984,11 +1011,7 @@ export default function App() {
                 <small>{timerLabel}</small>
               </div>
               <aside>
-                <button
-                  onClick={() => save({ ...game, remaining: Math.max(0, game.remaining - 30) })}
-                >
-                  −30
-                </button>
+                <button onClick={() => adjustTimer(-30)}>−30</button>
                 <button
                   className="play"
                   onClick={() =>
@@ -996,18 +1019,13 @@ export default function App() {
                       ...game,
                       running: !game.running && game.remaining > 0,
                       lastTick: Date.now(),
+                      pauseUntil: undefined,
                     })
                   }
                 >
                   {game.running ? <Pause /> : <Play />}
                 </button>
-                <button
-                  onClick={() =>
-                    save({ ...game, remaining: game.remaining + 30, lastTick: Date.now() })
-                  }
-                >
-                  +30
-                </button>
+                <button onClick={() => adjustTimer(30)}>+30</button>
               </aside>
             </div>
           )}
@@ -1086,7 +1104,7 @@ export default function App() {
           <div className="entry">
             <div className="quick">
               {[5, 10, 15, -5].map((n) => (
-                <button className={n < 0 ? "negative" : ""} onClick={() => addScore(n)} key={n}>
+                <button className={n < 0 ? "negative" : ""} onClick={() => addScore(n, Date.now())} key={n}>
                   {n > 0 ? "+" : ""}
                   {n}
                 </button>
@@ -1099,21 +1117,21 @@ export default function App() {
                 inputMode="numeric"
                 value={input}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") addScore(+input);
+                  if (e.key === "Enter") addScore(+input, Date.now());
                 }}
                 onChange={(e) => setInput(e.target.value.replace(/[^0-9-]/g, ""))}
               />
               <button
                 className="primary"
                 disabled={!input || !+input}
-                onClick={() => addScore(+input)}
+                onClick={() => addScore(+input, Date.now())}
               >
                 Add score <Plus />
               </button>
             </div>
 
             {game.undo && (
-              <button className="undo" onClick={undoLastScore}>
+              <button className="undo" onClick={() => undoLastScore(Date.now())}>
                 <RotateCcw />
                 Undo last score
               </button>
@@ -1335,8 +1353,9 @@ export default function App() {
 
     // Start a new game with the same players and settings
     const playAgain = () => {
+      const now = Date.now();
       const rematch: Game = {
-        ...createFreshGame(),
+        ...createFreshGame(now),
         title: game.title,
         mode: game.mode,
         duration: game.duration,
@@ -1344,7 +1363,7 @@ export default function App() {
         current: randomStartingPlayer(game.players.length),
         players: game.players.map((p, i) => ({
           ...p,
-          id: uid(),
+          id: uid(now),
           score: 0,
           color: COLORS[i],
         })),
