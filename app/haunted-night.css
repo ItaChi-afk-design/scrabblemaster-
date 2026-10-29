@@ -1,0 +1,806 @@
+.app.hauntedTheme {
+  --ink: #f5f3ff;
+  --green: #0b0a12;
+  --ivory: #0f0d17;
+  --paper: #181421;
+  --gold: #ff7518;
+  --muted: #b7aec9;
+  --line: #40354f;
+  --red: #ff8a75;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: #0b0a12;
+  color: #f5f3ff;
+  color-scheme: dark;
+}
+
+.app.hauntedTheme::before {
+  z-index: -2;
+  inset: 0;
+  height: auto;
+  background:
+    radial-gradient(ellipse at 79% 4%, #65427d38, transparent 34%),
+    radial-gradient(ellipse at 12% 25%, #ff751812, transparent 32%),
+    linear-gradient(155deg, #241437 0%, #100d18 35%, #0b0a12 72%);
+}
+
+.app.hauntedTheme::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1px 1px at 14% 12%, #ffb2679c 99%, transparent),
+    radial-gradient(2px 2px at 76% 18%, #a78bfa75 99%, transparent),
+    radial-gradient(1px 1px at 58% 46%, #ff75188c 99%, transparent),
+    radial-gradient(1px 1px at 87% 68%, #ffb26785 99%, transparent),
+    radial-gradient(2px 2px at 32% 84%, #a78bfa70 99%, transparent);
+  background-size: 310px 280px;
+  content: "";
+  opacity: 0.28;
+  animation: hauntedEmbers 20s linear infinite;
+}
+
+.hauntedTheme header {
+  color: #f5f3ff;
+}
+
+.hauntedTheme header .brand small {
+  color: #c3b4dc;
+}
+
+.hauntedTheme .icon {
+  border-color: #a78bfa45;
+  background: #241437a8;
+  color: #f5f3ff;
+}
+
+.hauntedTheme header .headerLinks button {
+  color: #ded5ed;
+}
+
+.hauntedTheme .headerLinks button:hover,
+.hauntedTheme .sectionHeading button:hover,
+.hauntedTheme .scorebookAside button:hover {
+  color: #ffb36e;
+}
+
+.hauntedTheme button {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 180ms ease;
+}
+
+.hauntedTheme button:focus-visible,
+.hauntedTheme input:focus-visible {
+  outline: 3px solid #c4a8ff;
+  outline-offset: 3px;
+}
+
+.hauntedTheme .primary,
+.hauntedTheme .headerNew,
+.hauntedTheme .finishConfirmButton,
+.hauntedTheme .throneRoomActions .throneRoomNewGame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ff9a4d;
+  background: linear-gradient(135deg, #ff8b32, #ff7518 72%);
+  box-shadow: 0 8px 24px #ff75182e, inset 0 1px 0 #ffffff35;
+  color: #1b1010;
+  isolation: isolate;
+}
+
+.hauntedTheme .primary::before,
+.hauntedTheme .headerNew::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, #fff8 48%, transparent 65%);
+  content: "";
+  transform: translateX(-120%);
+  transition: transform 650ms ease;
+}
+
+.hauntedTheme .primary:hover::before,
+.hauntedTheme .headerNew:hover::before {
+  transform: translateX(120%);
+}
+
+.hauntedTheme .primary:hover,
+.hauntedTheme .headerNew:hover,
+.hauntedTheme .finishConfirmButton:hover {
+  box-shadow: 0 9px 28px #ff75184d, inset 0 1px 0 #ffffff45;
+  transform: translateY(-1px);
+}
+
+.hauntedTheme .primary:active,
+.hauntedTheme .headerNew:active,
+.hauntedTheme .finishConfirmButton:active {
+  box-shadow: 0 3px 10px #ff75182e;
+  transform: translateY(1px) scale(0.99);
+}
+
+.hauntedTheme .primary:disabled {
+  box-shadow: none;
+}
+
+.hauntedTheme .secondary,
+.hauntedTheme .icon,
+.hauntedTheme .throneRoomActions button,
+.hauntedTheme .throneRoomSound {
+  border-color: #a78bfa65;
+  background-color: #241437b8;
+  color: #eee8ff;
+}
+
+.hauntedTheme .secondary:hover,
+.hauntedTheme .icon:hover,
+.hauntedTheme .throneRoomActions button:hover,
+.hauntedTheme .throneRoomSound:hover {
+  border-color: #c3a9ff;
+  box-shadow: 0 0 18px #a78bfa35;
+}
+
+.hauntedTheme section > p,
+.hauntedTheme label {
+  color: #c6bad8;
+}
+
+.hauntedTheme .gameCard,
+.hauntedTheme .leaderboard,
+.hauntedTheme .entry,
+.hauntedTheme .settingsCard,
+.hauntedTheme .chart,
+.hauntedTheme .historyCard,
+.hauntedTheme .stats > div,
+.hauntedTheme .rank {
+  border-color: #453752;
+  background-color: #181421ed;
+  box-shadow: 0 12px 30px #0003;
+  color: #f5f3ff;
+}
+
+.hauntedTheme .gameCard > i {
+  background: #a78bfa1d;
+  color: #cfbcff;
+}
+
+.hauntedTheme .gameCard small,
+.hauntedTheme .event small,
+.hauntedTheme .leaderboardPoints small,
+.hauntedTheme .settingsHint {
+  color: #b7aec9;
+}
+
+.hauntedTheme .scorebookAside,
+.hauntedTheme .gamesPanel {
+  color: #f5f3ff;
+}
+
+.hauntedTheme .scorebookAside {
+  border-color: #a78bfa54;
+  background: linear-gradient(145deg, #241437, #181421);
+  box-shadow: 0 14px 34px #0004, inset 0 1px 0 #ffffff0a;
+}
+
+.hauntedTheme .scorebookAside > div {
+  border-bottom-color: #493c56;
+}
+
+.hauntedTheme .scorebookAside > small,
+.hauntedTheme .heroCopy small,
+.hauntedTheme .sectionHeading small {
+  color: #ffb36e;
+}
+
+.hauntedTheme .scorebookAside b {
+  color: #f5f3ff;
+}
+
+.hauntedTheme .scorebookAside span,
+.hauntedTheme .sectionHeading h2 {
+  color: #d7cde6;
+}
+
+.hauntedTheme .dashboardHero {
+  position: relative;
+  border-color: #a78bfa4d;
+  background:
+    radial-gradient(ellipse at 12% 15%, #a78bfa18, transparent 42%),
+    linear-gradient(125deg, #21152f, #100e19 72%);
+  box-shadow: 0 20px 55px #0004, inset 0 1px 0 #ffffff0a;
+}
+
+.hauntedTheme .heroCopy h2 {
+  max-width: 650px;
+  color: #fffaff;
+  font-size: clamp(32px, 7vw, 58px);
+  letter-spacing: -0.035em;
+  text-shadow: 0 0 24px #a78bfa24;
+}
+
+.hauntedTheme .heroCopy p {
+  color: #d4cbdf;
+}
+
+.hauntedBadge {
+  min-height: 29px;
+  padding: 6px 10px;
+  border: 1px solid #a78bfa85;
+  border-radius: 999px;
+  background: #a78bfa18;
+  color: #e2d6ff;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+}
+
+.hauntedBadge:hover {
+  border-color: #ff9a4d;
+  box-shadow: 0 0 18px #a78bfa2e;
+}
+
+.hauntedTheme .heroAction {
+  min-height: 56px;
+  margin-top: 24px;
+  padding-inline: 19px;
+}
+
+.hauntedScene {
+  position: relative;
+  min-height: 245px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 50% 100%, #6b3b6338, transparent 50%),
+    linear-gradient(180deg, #161026 0%, #251437 55%, #100d18 100%);
+}
+
+.hauntedScene::before {
+  position: absolute;
+  z-index: -1;
+  right: -15%;
+  bottom: 4%;
+  left: -15%;
+  height: 28%;
+  background:
+    radial-gradient(ellipse at 20% 20%, #cbb9e42e, transparent 45%),
+    radial-gradient(ellipse at 70% 70%, #a78bfa1e, transparent 48%),
+    linear-gradient(180deg, transparent, #bba8da18);
+  content: "";
+  filter: blur(14px);
+  animation: hauntedMist 13s ease-in-out infinite alternate;
+}
+
+.hauntedMoon {
+  position: absolute;
+  top: 12%;
+  right: 17%;
+  width: clamp(48px, 10vw, 80px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 36%, #fffdf6, #e6d9ff 72%);
+  box-shadow: 0 0 24px #e6d9ff70, 0 0 70px #a78bfa47;
+}
+
+.hauntedMansion {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  width: 43%;
+  height: 43%;
+  border: 1px solid #9a7fa84d;
+  background:
+    linear-gradient(#ffc06d, #f49b4d) 28% 55% / 10px 15px no-repeat,
+    linear-gradient(#ffc06d, #f49b4d) 72% 55% / 10px 15px no-repeat,
+    linear-gradient(180deg, #332345, #120e1c);
+  box-shadow: inset 0 0 22px #080611, 0 0 25px #a78bfa16;
+  clip-path: polygon(0 26%, 13% 26%, 13% 0, 27% 0, 27% 26%, 37% 26%, 50% 0, 63% 26%, 73% 26%, 73% 0, 87% 0, 87% 26%, 100% 26%, 100% 100%, 0 100%);
+  transform: translateX(-50%);
+}
+
+.hauntedMansion::after {
+  position: absolute;
+  right: 43%;
+  bottom: 0;
+  left: 43%;
+  height: 42%;
+  border: 1px solid #a78bfa55;
+  border-radius: 50% 50% 0 0;
+  background: #0b0a12;
+  content: "";
+}
+
+.hauntedTree {
+  position: absolute;
+  bottom: 14%;
+  width: 26%;
+  height: 65%;
+  background: linear-gradient(90deg, #0b0a12, #25172f);
+  clip-path: polygon(49% 0, 57% 19%, 75% 14%, 67% 31%, 87% 27%, 68% 47%, 100% 42%, 71% 57%, 77% 100%, 34% 100%, 41% 58%, 0 64%, 32% 46%, 10% 47%, 34% 30%, 21% 17%, 43% 22%);
+}
+
+.hauntedTreeLeft {
+  left: -5%;
+}
+
+.hauntedTreeRight {
+  right: -5%;
+  transform: scaleX(-1);
+}
+
+.hauntedSceneGhost {
+  position: absolute;
+  top: 23%;
+  left: 24%;
+  font-size: 28px;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 10px #e7dbff80);
+  animation: hauntedGhostDrift 18s ease-in-out infinite;
+}
+
+.hauntedPumpkin {
+  position: absolute;
+  z-index: 1;
+  right: 11%;
+  bottom: 9%;
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 1px solid #ff9a4d9c;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff751838, #160e1e 74%);
+  box-shadow: 0 0 21px #ff75182d;
+  font-size: 31px;
+}
+
+.hauntedPumpkin:hover,
+.hauntedPumpkin:focus-visible {
+  box-shadow: 0 0 30px #ff751880;
+  transform: scale(1.06);
+}
+
+.hauntedSceneCaption {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  display: grid;
+  gap: 3px;
+  color: #c5b7d5;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-align: left;
+}
+
+.hauntedSceneCaption b {
+  color: #ffb36e;
+  font-size: 10px;
+}
+
+.hauntedTheme .sectionHeading button,
+.hauntedTheme .scorebookAside button {
+  color: #d5c7e9;
+}
+
+.hauntedTheme .gameCard:hover {
+  border-color: #a78bfa82;
+  box-shadow: 0 10px 24px #a78bfa12;
+}
+
+.hauntedTheme .leaderboard {
+  border-color: #a78bfa48;
+  background: #15111e;
+  box-shadow: 0 16px 38px #0004, 0 0 28px #a78bfa0b;
+}
+
+.hauntedTheme .leaderboardHeader {
+  background: #21172d;
+  color: #c5bad3;
+}
+
+.hauntedTheme .leaderboardItem + .leaderboardItem {
+  border-top-color: #ffffff10;
+}
+
+.hauntedTheme .leaderboardRow {
+  background: #15111e;
+  color: #f5f3ff;
+}
+
+.hauntedTheme .leaderboardRow:hover {
+  background: #21172d;
+}
+
+.hauntedTheme .leaderboardItem:first-child .leaderboardRow {
+  box-shadow: inset 0 0 32px #a78bfa17, 0 0 20px #ff751812;
+}
+
+.hauntedTheme .leaderboardRow.current {
+  border-color: transparent;
+  background:
+    linear-gradient(90deg, #281838, #17111e) padding-box,
+    conic-gradient(from var(--active-player-angle), #ff7518, #a78bfa, #ffd399, #ff7518) border-box;
+}
+
+.hauntedTheme .leaderboardRank {
+  background: #2a2333;
+  color: #d4c8e3;
+}
+
+.hauntedTheme .leaderboardRank.isLeader {
+  background: #ff751826;
+  color: #ffb36e;
+}
+
+.hauntedTheme .leaderboardRank svg {
+  width: 17px;
+  fill: #ffab4a;
+  filter: drop-shadow(0 0 5px #ff751866);
+}
+
+.hauntedTheme .leaderboardPlayer small,
+.hauntedTheme .leaderboardRow.current .leaderboardPlayer small {
+  color: #c4b3dc;
+}
+
+.hauntedTheme .leaderboardPoints strong,
+.hauntedTheme .rank strong {
+  color: #fff9ff;
+}
+
+.hauntedTheme .leaderboardRow.scored {
+  animation: hauntedScoreGlow 650ms ease-out;
+}
+
+.hauntedTheme .leaderboardHeading small {
+  color: #ffb36e;
+}
+
+.hauntedTheme .leaderboardHeading h2 {
+  color: #f5f3ff;
+}
+
+.hauntedTheme .leaderboardHeading > span {
+  color: #b7aec9;
+}
+
+.hauntedTheme .gameScreen .leaderboardHeading::after {
+  margin-left: auto;
+  color: #ffb36e;
+  content: "🎃";
+  filter: drop-shadow(0 0 10px #ff751866);
+  animation: hauntedPumpkinGlow 3.2s ease-in-out infinite;
+}
+
+.hauntedTheme .entry {
+  border-color: #a78bfa3d;
+  background: #171320ed;
+}
+
+.hauntedTheme .quick button,
+.hauntedTheme .modes button,
+.hauntedTheme .duration button,
+.hauntedTheme .filters button {
+  border-color: #59476b;
+  background: #21192c;
+  color: #ebe4f5;
+}
+
+.hauntedTheme .quick button:hover,
+.hauntedTheme .modes button:hover,
+.hauntedTheme .duration button:hover,
+.hauntedTheme .filters button:hover {
+  border-color: #a78bfa;
+  box-shadow: 0 0 16px #a78bfa26;
+}
+
+.hauntedTheme .quick button.negative {
+  color: #ffad9e;
+}
+
+.hauntedTheme .modes button small,
+.hauntedTheme .empty,
+.hauntedTheme .turn,
+.hauntedTheme .meta {
+  color: #c4b8d5;
+}
+
+.hauntedTheme .modes .selected,
+.hauntedTheme .duration .selected,
+.hauntedTheme .filters .selected {
+  border-color: #ff8a37;
+  background: linear-gradient(135deg, #432338, #2a1c39);
+  box-shadow: inset 0 0 18px #ff75181a, 0 0 16px #ff75181a;
+  color: #fff4e8;
+}
+
+.hauntedTheme .player input,
+.hauntedTheme label input,
+.hauntedTheme .scoreInput input {
+  border-color: #534565;
+  background: #120f19;
+  color: #f5f3ff;
+}
+
+.hauntedTheme .player input::placeholder,
+.hauntedTheme .scoreInput input::placeholder {
+  color: #8f829f;
+}
+
+.hauntedTheme .addPlayer,
+.hauntedTheme .undo {
+  border-color: #a78bfa6b;
+  color: #d3c4f1;
+}
+
+.hauntedTheme .addPlayer:hover,
+.hauntedTheme .undo:hover {
+  color: #ffbc80;
+  text-shadow: 0 0 12px #a78bfa5c;
+}
+
+.hauntedTheme .finishButton,
+.hauntedTheme .finishKeepButton {
+  border-color: #a78bfa60;
+  background: #241437;
+  color: #f5f3ff;
+}
+
+.hauntedTheme .finishButton:hover,
+.hauntedTheme .finishKeepButton:hover {
+  border-color: #c3a9ff;
+  box-shadow: 0 0 18px #a78bfa2b;
+}
+
+.hauntedTheme .finishDialog {
+  border-color: #a78bfa80;
+  background: #181421;
+  color: #f5f3ff;
+  box-shadow: 0 25px 90px #000b, 0 0 36px #a78bfa2b;
+}
+
+.hauntedTheme .finishDialog h2,
+.hauntedTheme .finishDialogContent > p,
+.hauntedTheme .finishScoreRow b,
+.hauntedTheme .finishScoreRow strong {
+  color: #f5f3ff;
+}
+
+.hauntedTheme .finishScoreList {
+  border-color: #453752;
+  background: #211a2b;
+}
+
+.hauntedTheme .finishScoreRow + .finishScoreRow {
+  border-top-color: #ffffff12;
+}
+
+.hauntedTheme .rank {
+  border-bottom-color: #493c56;
+}
+
+.hauntedTheme .rank > small {
+  background: #2b2038;
+  color: #ffbd7b;
+}
+
+.hauntedTheme .winner {
+  border-color: #a78bfa59;
+  background:
+    radial-gradient(ellipse at 50% 0, #ff751829, transparent 65%),
+    linear-gradient(135deg, #2b1b38, #15111e);
+  box-shadow: 0 0 34px #a78bfa20;
+  color: #f5f3ff;
+}
+
+.hauntedTheme .winner h2,
+.hauntedTheme .winner b {
+  color: #fff7ec;
+}
+
+.hauntedTheme .winner svg {
+  color: #ffb34e;
+  filter: drop-shadow(0 0 10px #ff751866);
+}
+
+.hauntedTheme nav {
+  border-top-color: #443750;
+  background: #100d18f2;
+  box-shadow: 0 -12px 32px #0004;
+  backdrop-filter: blur(14px);
+}
+
+.hauntedTheme nav button {
+  color: #b9aec8;
+}
+
+.hauntedTheme nav .active {
+  color: #ffad66;
+}
+
+.hauntedTheme nav .active::before {
+  background: #ff7518;
+  box-shadow: 0 0 12px #ff751866;
+}
+
+.hauntedTheme .toast {
+  border: 1px solid #a78bfa85;
+  background: #21172df2;
+  color: #f5f3ff;
+  box-shadow: 0 8px 32px #0008, 0 0 20px #a78bfa26;
+}
+
+.hauntedTheme .throneRoomScene {
+  border-color: #25c9ff70;
+  background-image:
+    linear-gradient(180deg, #05264c08, #03193620),
+    url("/throne-version2.png");
+  background-blend-mode: normal;
+  box-shadow: inset 0 0 75px #03193670, 0 15px 50px #000b;
+}
+
+.hauntedTheme .monarchLeaderboard {
+  border-color: #25c9ff;
+  background: #03142de8;
+  box-shadow: 0 5px 23px #000b, 0 0 18px #25c9ff40;
+}
+
+.hauntedTheme .monarchLeaderboard li {
+  color: #e8ddf5;
+}
+
+.hauntedTheme .monarchLeaderboard li.isChampion {
+  border-color: #ffad4d;
+  background: linear-gradient(90deg, #5a2c25, #281638);
+  box-shadow: 0 0 14px #ff75184a;
+  color: #fff0d9;
+}
+
+.hauntedTheme .monarchRank {
+  color: #83dfff;
+}
+
+.hauntedTheme .monarchLeaderboard strong {
+  color: #ffd39e;
+}
+
+.hauntedTheme .throneRoomWinner {
+  filter: drop-shadow(0 0 12px #ffc849);
+}
+
+.hauntedTheme .monarchWinnerNames article {
+  border-color: #ffda61;
+  background: linear-gradient(90deg, #241b0df2, #4b3512f2, #241b0df2);
+  box-shadow: 0 0 18px #ffc84978, 0 5px 16px #000b;
+  color: #fff0d9;
+}
+
+.hauntedTheme .monarchWinnerNames h2 {
+  color: #fff0d9;
+  text-shadow: 0 0 9px #ffb55b70;
+}
+
+.hauntedTheme .monarchCourtLabel {
+  border-color: #1bcaff;
+  background: #00152fe8;
+  box-shadow: 0 0 10px #0abaff;
+  color: #e4f8ff;
+}
+
+.hauntedChampionWhisper {
+  margin: 0;
+  color: #ffd39e;
+  font: 700 14px Georgia, serif;
+  text-align: center;
+  text-shadow: 0 0 16px #ff75185c;
+}
+
+.hauntedTheme .throneRoomActions .throneRoomNewGame {
+  border-color: #ff9a4d;
+  background: linear-gradient(135deg, #ff8b32, #ff7518);
+  color: #1b1010;
+}
+
+.hauntedTheme .throneRoomTopline small {
+  color: #d4bdff;
+  text-shadow: 0 0 14px #a78bfa;
+}
+
+.hauntedTheme .throneRoomTopline h1 {
+  text-shadow: 0 3px 0 #4a2d68, 0 0 19px #a78bfa99;
+}
+
+.hauntedTheme .throneRoomTopline p {
+  color: #e2d6f1;
+}
+
+@keyframes hauntedEmbers {
+  to { background-position: 0 280px; }
+}
+
+@keyframes hauntedMist {
+  from { transform: translateX(-3%); opacity: 0.35; }
+  to { transform: translateX(3%); opacity: 0.75; }
+}
+
+@keyframes hauntedGhostDrift {
+  0%, 75%, 100% { transform: translate(0, 0); }
+  82% { transform: translate(18px, -10px); }
+  90% { transform: translate(34px, 5px); }
+}
+
+@keyframes hauntedPumpkinGlow {
+  0%, 100% { filter: drop-shadow(0 0 5px #ff751833); }
+  50% { filter: drop-shadow(0 0 12px #ff751899); }
+}
+
+@keyframes hauntedScoreGlow {
+  0% { box-shadow: inset 0 0 0 #ff751800; }
+  35% { box-shadow: inset 0 0 36px #ff75184d, 0 0 20px #ff751833; }
+  100% { box-shadow: inset 0 0 0 #ff751800; }
+}
+
+@media (min-width: 700px) {
+  .hauntedScene {
+    min-height: 270px;
+  }
+
+  .hauntedTheme .hauntedChampionWhisper {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 699px) {
+  .hauntedTheme .dashboardHero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hauntedTheme .heroCopy {
+    padding: 25px 22px;
+  }
+
+  .hauntedTheme .heroCopy h2 {
+    max-width: 460px;
+    font-size: clamp(34px, 10vw, 48px);
+  }
+
+  .hauntedScene {
+    min-height: 220px;
+  }
+
+  .hauntedTheme .scoreInput input {
+    width: 74px;
+  }
+
+  .hauntedTheme .leaderboardHeader,
+  .hauntedTheme .leaderboardRow {
+    column-gap: 7px;
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app.hauntedTheme::after,
+  .hauntedTheme .hauntedScene::before,
+  .hauntedTheme .hauntedSceneGhost,
+  .hauntedTheme .gameScreen .leaderboardHeading::after {
+    animation: none !important;
+  }
+
+  .hauntedTheme *,
+  .hauntedTheme *::before,
+  .hauntedTheme *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

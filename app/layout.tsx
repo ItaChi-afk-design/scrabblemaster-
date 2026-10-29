@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./gothic-pages.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ScrabbleScore",
-  description: "Premium offline Scrabble score tracker",
+  title: "Wordkeeper: Haunted Night",
+  description: "Gather your friends. Sharpen your words. Survive the night.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

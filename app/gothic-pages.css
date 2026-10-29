@@ -1,0 +1,1141 @@
+.gothicPages.app.hauntedTheme {
+  --ink: #e8decb;
+  --green: #111114;
+  --ivory: #08090b;
+  --paper: #191719;
+  --gold: #c18a43;
+  --muted: #99918a;
+  --line: #393330;
+  --red: #d2846c;
+  position: relative;
+  isolation: isolate;
+  background: #08090b;
+  color: #e8decb;
+  color-scheme: dark;
+  font-family: Arial, sans-serif;
+}
+
+.gothicPages.app.hauntedTheme::before {
+  inset: 0;
+  height: auto;
+  background-image:
+    linear-gradient(180deg, #08090be0 0%, #08090bdc 34%, #08090bf0 100%),
+    radial-gradient(ellipse at 82% 4%, #c18a4318, transparent 36%),
+    url("/haunted-manor.webp");
+  background-position: center, center, center 28%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.gothicPages.app.hauntedTheme::after {
+  background:
+    radial-gradient(1px 1px at 14% 12%, #e8decb70 99%, transparent),
+    radial-gradient(1px 1px at 76% 18%, #e8decb55 99%, transparent),
+    radial-gradient(1px 1px at 58% 46%, #c18a4350 99%, transparent),
+    radial-gradient(1px 1px at 87% 68%, #e8decb50 99%, transparent),
+    radial-gradient(1px 1px at 32% 84%, #e8decb45 99%, transparent);
+  background-size: 290px 260px;
+  animation: none;
+  opacity: 0.14;
+}
+
+.gothicPages header {
+  width: min(100%, 1120px);
+  height: 82px;
+  margin: 0 auto;
+  color: #e8decb;
+}
+
+.gothicPages header .brand small {
+  color: #99918a;
+  letter-spacing: 2px;
+}
+
+.gothicPages header h1 {
+  color: #e8decb;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+}
+
+.gothicPages .icon {
+  border-color: #e8decb35;
+  border-radius: 12px;
+  background: #111114c9;
+  color: #e8decb;
+}
+
+.gothicPages .headerLinks button {
+  color: #c5bdae;
+}
+
+.gothicPages section > p,
+.gothicPages label {
+  color: #c18a43;
+}
+
+.gothicPages.app > section {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.gothicPages.app > .home {
+  width: min(100%, 1180px);
+}
+
+.gothicPages .primary,
+.gothicPages .headerNew {
+  min-height: 48px;
+  border: 1px solid #bd6335;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #a94720, #873819);
+  box-shadow: 0 7px 20px #a9472026, inset 0 1px #ffffff18;
+  color: #f3e7d2;
+  font-weight: 750;
+}
+
+.gothicPages .primary:hover,
+.gothicPages .headerNew:hover {
+  border-color: #c18a43;
+  background: linear-gradient(135deg, #b75428, #99421e);
+  box-shadow: 0 8px 24px #a947203d, inset 0 1px #ffffff22;
+  transform: translateY(-1px);
+}
+
+.gothicPages .primary:active,
+.gothicPages .headerNew:active {
+  transform: translateY(1px);
+}
+
+.gothicPages .primary:focus-visible,
+.gothicPages .secondary:focus-visible,
+.gothicPages button:focus-visible,
+.gothicPages input:focus-visible {
+  outline: 2px solid #c18a43;
+  outline-offset: 3px;
+}
+
+.gothicPages .secondary,
+.gothicPages .icon {
+  border: 1px solid #50443a;
+  border-radius: 10px;
+  background: #111114c9;
+  color: #d6cbb9;
+}
+
+.gothicPages .secondary:hover,
+.gothicPages .icon:hover {
+  border-color: #887047;
+  background: #1a1715;
+}
+
+.gothicPages nav {
+  border-top: 1px solid #393330;
+  background: #0c0c0def;
+  box-shadow: 0 -8px 28px #0008;
+}
+
+.gothicPages nav button {
+  color: #89817a;
+}
+
+.gothicPages nav .active {
+  color: #e8decb;
+}
+
+.gothicPages nav .active::before {
+  background: #a94720;
+  box-shadow: 0 0 12px #a9472055;
+}
+
+.gothicPages .gameCard,
+.gothicPages .leaderboard,
+.gothicPages .entry,
+.gothicPages .card,
+.gothicPages .settingsCard,
+.gothicPages .chart,
+.gothicPages .historyCard,
+.gothicPages .stats > div {
+  border: 1px solid #393330;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #1b1919, #131315);
+  box-shadow: 0 14px 36px #0005, inset 0 1px #ffffff08;
+  color: #e8decb;
+}
+
+.gothicPages .gameCard {
+  min-height: 72px;
+}
+
+.gothicPages .gameCard:hover {
+  border-color: #776044;
+  background: linear-gradient(145deg, #211d1a, #171617);
+  box-shadow: 0 12px 30px #0006, 0 0 18px #c18a4310;
+  transform: translateY(-1px);
+}
+
+.gothicPages .gameCard > i {
+  border: 1px solid #c18a433d;
+  background: #c18a4314;
+  color: #c18a43;
+}
+
+.gothicPages .gameCard b,
+.gothicPages .settingsCardHeading h2,
+.gothicPages .leaderboardPlayer b {
+  color: #e8decb;
+}
+
+.gothicPages .gameCard small,
+.gothicPages .event small,
+.gothicPages .leaderboardPoints small,
+.gothicPages .settingsHint,
+.gothicPages .settingsRowLabel small {
+  color: #99918a;
+}
+
+.gothicPages .resume {
+  border-color: #82683f;
+  background: linear-gradient(145deg, #211d18, #171617);
+}
+
+.gothicPages .resume > i {
+  background: #c18a4320;
+  color: #c18a43;
+}
+
+.gothicPages .dashboardHero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  border: 1px solid #62503c;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 15% 0%, #c18a4318, transparent 45%),
+    linear-gradient(135deg, #171616f7, #0d0e10f5);
+  box-shadow: 0 22px 60px #0008, inset 0 1px #ffffff0a;
+}
+
+.gothicPages .heroCopy {
+  padding: clamp(24px, 5vw, 48px);
+}
+
+.gothicPages .heroCopy h2 {
+  max-width: 570px;
+  margin: 18px 0 9px;
+  color: #efe5d2;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 5.4vw, 68px);
+  font-weight: 500;
+  letter-spacing: 0.035em;
+  line-height: 0.98;
+  text-shadow: 0 4px 28px #0009;
+}
+
+.gothicPages .heroCopy p {
+  max-width: 390px;
+  color: #b7afa4;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.gothicPages .heroCopy small,
+.gothicPages .sectionHeading small,
+.gothicPages .scorebookAside > small {
+  color: #c18a43;
+}
+
+.gothicPages .hauntedBadge {
+  min-height: 29px;
+  border-color: #69543a;
+  background: #c18a4310;
+  color: #d0a76c;
+}
+
+.gothicPages .hauntedBadge:hover {
+  border-color: #a94720;
+  background: #a947201c;
+}
+
+.gothicPages .heroAction {
+  margin-top: 14px;
+}
+
+.gothicPages .hauntedScene {
+  min-height: 330px;
+  background:
+    linear-gradient(180deg, #08090b50, #08090b25 38%, #08090bba 100%),
+    url("/haunted-manor.webp") center 48% / cover,
+    linear-gradient(145deg, #211f1c, #111114);
+}
+
+.gothicPages .hauntedScene::before {
+  z-index: 0;
+  right: -15%;
+  bottom: -7%;
+  left: -15%;
+  height: 42%;
+  background:
+    radial-gradient(ellipse at 20% 45%, #e8decb12, transparent 45%),
+    radial-gradient(ellipse at 70% 65%, #b9c0b21b, transparent 48%),
+    linear-gradient(180deg, transparent, #b9c0b21a);
+  filter: blur(20px);
+  animation: gothicFog 26s ease-in-out infinite alternate;
+}
+
+.gothicPages .hauntedMoon,
+.gothicPages .hauntedMansion,
+.gothicPages .hauntedTree,
+.gothicPages .hauntedSceneGhost {
+  display: none;
+}
+
+.gothicPages .hauntedPumpkin {
+  right: 12px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  border-color: #c18a4366;
+  background: #111114d9;
+  box-shadow: 0 0 18px #0008;
+  color: #c18a43;
+  font-size: 17px;
+}
+
+.gothicPages .hauntedPumpkin:hover {
+  border-color: #c18a43;
+  box-shadow: 0 0 18px #c18a433d;
+  transform: scale(1.04);
+}
+
+.gothicPages .hauntedSceneCaption {
+  z-index: 1;
+  left: 18px;
+  bottom: 16px;
+  color: #d1c7b6;
+}
+
+.gothicPages .hauntedSceneCaption b {
+  color: #c18a43;
+}
+
+.gothicPages .gamesPanel,
+.gothicPages .scorebookAside {
+  color: #e8decb;
+}
+
+.gothicPages .scorebookAside {
+  border: 1px solid #62503c;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #1d1a17, #121214);
+  box-shadow: 0 16px 38px #0006;
+}
+
+.gothicPages .scorebookAside > div {
+  border-bottom-color: #393330;
+}
+
+.gothicPages .scorebookAside b {
+  color: #e8decb;
+}
+
+.gothicPages .scorebookAside span,
+.gothicPages .sectionHeading h2 {
+  color: #c9c0b2;
+}
+
+.gothicPages .sectionHeading button,
+.gothicPages .scorebookAside button,
+.gothicPages .links button {
+  color: #c9c0b2;
+}
+
+.gothicPages .sectionHeading button:hover,
+.gothicPages .scorebookAside button:hover,
+.gothicPages .links button:hover {
+  color: #c18a43;
+}
+
+.gothicPages .modes button,
+.gothicPages .duration button,
+.gothicPages .duration input,
+.gothicPages label input,
+.gothicPages .player input,
+.gothicPages .scoreInput input,
+.gothicPages .filters button {
+  border-color: #393330;
+  border-radius: 10px;
+  background: #111114;
+  color: #e8decb;
+}
+
+.gothicPages label input,
+.gothicPages .player input,
+.gothicPages .scoreInput input,
+.gothicPages .duration input {
+  min-height: 46px;
+}
+
+.gothicPages input::placeholder {
+  color: #77716a;
+}
+
+.gothicPages .modes button small {
+  color: #99918a;
+}
+
+.gothicPages .modes .selected,
+.gothicPages .duration .selected,
+.gothicPages .filters .selected {
+  border-color: #a94720;
+  background: #a947201b;
+  color: #e8decb;
+  box-shadow: inset 0 0 0 1px #a947202e;
+}
+
+.gothicPages .player {
+  margin: 10px 0;
+}
+
+.gothicPages .avatar {
+  border-color: #c18a434d;
+  filter: saturate(0.7);
+}
+
+.gothicPages .dot {
+  border-color: #191719;
+  box-shadow: 0 0 0 1px #80766a;
+}
+
+.gothicPages .remove {
+  color: #b7afa4;
+}
+
+.gothicPages .addPlayer {
+  border-color: #6a5945;
+  color: #c18a43;
+}
+
+.gothicPages .addPlayer:hover {
+  border-color: #a94720;
+  background: #a9472010;
+}
+
+.gothicPages .toggle {
+  border-bottom-color: #393330;
+  color: #e8decb;
+}
+
+.gothicPages .toggle span {
+  background: #514a43;
+}
+
+.gothicPages .toggle span i {
+  background: #d9cebb;
+}
+
+.gothicPages .toggle span.on {
+  background: #a94720;
+}
+
+.gothicPages .toggle span.on i {
+  background: #f0dfc2;
+}
+
+.gothicPages .settingsMode {
+  background: #c18a4318;
+  color: #c18a43;
+}
+
+.gothicPages .settingsDuration,
+.gothicPages .settingsCardHeading {
+  border-color: #393330;
+}
+
+.gothicPages .settingsRowLabel b {
+  color: #e8decb;
+}
+
+.gothicPages .timer > div {
+  border-color: #846438;
+  background: radial-gradient(circle, #c18a4312, #0b0b0d 72%);
+  box-shadow: 0 0 32px #c18a4312, inset 0 0 20px #c18a430b;
+}
+
+.gothicPages .timer strong {
+  color: #e5c28d;
+}
+
+.gothicPages .timer small {
+  color: #aaa194;
+}
+
+.gothicPages .timer.warn > div {
+  border-color: #a94720;
+  box-shadow: 0 0 26px #a9472033;
+}
+
+.gothicPages .timer aside button {
+  border-color: #5b4937;
+  background: #151413;
+  color: #d8c6a9;
+}
+
+.gothicPages .timer aside .play {
+  border-color: #a94720;
+  background: #a94720;
+  color: #f5e8d2;
+}
+
+.gothicPages .meta,
+.gothicPages .turn {
+  color: #c9c0b2;
+}
+
+.gothicPages .leaderboard {
+  border-color: #494039;
+  background: #141416;
+}
+
+.gothicPages .leaderboardHeader {
+  background: #1c1a19;
+  color: #99918a;
+}
+
+.gothicPages .leaderboardItem + .leaderboardItem {
+  border-top-color: #ffffff10;
+}
+
+.gothicPages .leaderboardRow {
+  background: #141416;
+  color: #e8decb;
+}
+
+.gothicPages .leaderboardRow:hover {
+  background: #1b1918;
+}
+
+.gothicPages .leaderboardItem:first-child .leaderboardRow {
+  background: linear-gradient(90deg, #292217, #171615);
+  box-shadow: inset 3px 0 #c18a43, inset 0 0 28px #c18a430c;
+}
+
+.gothicPages .leaderboardRow.current {
+  width: calc(100% - 12px);
+  margin: 6px;
+  border: 1px solid #a94720;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #281b16, #171514);
+  animation: none;
+}
+
+.gothicPages .leaderboardRank {
+  border: 1px solid #51463a;
+  background: #211f1d;
+  color: #c9c0b2;
+}
+
+.gothicPages .leaderboardRank.isLeader {
+  border-color: #9c753d;
+  background: #c18a4322;
+  color: #dfb56f;
+}
+
+.gothicPages .leaderboardRank svg {
+  fill: #c18a43;
+  filter: drop-shadow(0 0 4px #c18a4355);
+}
+
+.gothicPages .leaderboardPlayer small,
+.gothicPages .leaderboardRow.current .leaderboardPlayer small {
+  color: #99918a;
+}
+
+.gothicPages .leaderboardPoints strong {
+  color: #d18a53;
+}
+
+.gothicPages .leaderboardRow.scored {
+  animation: gothicScoreFlash 650ms ease-out;
+}
+
+.gothicPages .leaderboardHeading small {
+  color: #c18a43;
+}
+
+.gothicPages .leaderboardHeading h2 {
+  color: #e8decb;
+}
+
+.gothicPages .leaderboardHeading > span {
+  color: #99918a;
+}
+
+.gothicPages .entry {
+  border-color: #494039;
+  background: linear-gradient(145deg, #1a1817, #121214);
+}
+
+.gothicPages .quick button {
+  min-height: 44px;
+  border-color: #4a4037;
+  border-radius: 9px;
+  background: #151413;
+  color: #d3b27e;
+}
+
+.gothicPages .quick button:hover {
+  border-color: #a94720;
+  background: #a9472015;
+}
+
+.gothicPages .scoreInput input {
+  width: 88px;
+  font-size: 20px;
+}
+
+.gothicPages .undo {
+  color: #c18a43;
+}
+
+.gothicPages .filters button {
+  color: #c9c0b2;
+}
+
+.gothicPages .event {
+  border-bottom-color: #393330;
+  color: #e8decb;
+}
+
+.gothicPages .stats > div small,
+.gothicPages .stats > div b,
+.gothicPages .chart > p {
+  color: #e8decb;
+}
+
+.gothicPages .stats > div small {
+  color: #99918a;
+}
+
+.gothicPages .stats > div b {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.gothicPages .chart {
+  background: linear-gradient(145deg, #1b1919, #131315);
+}
+
+.gothicPages .bars i {
+  border: 1px solid #c18a4355;
+  border-bottom: 0;
+  background: linear-gradient(180deg, #c18a43, #754523);
+}
+
+.gothicPages .bars i span {
+  color: #c9c0b2;
+}
+
+.gothicPages .event strong.negative,
+.gothicPages .negative {
+  color: #d2846c;
+}
+
+.gothicPages .empty {
+  border-color: #51483d;
+  background: #111114b8;
+  color: #e8decb;
+}
+
+.gothicPages .empty h2 {
+  color: #e8decb;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.gothicPages .empty p {
+  color: #99918a;
+}
+
+.gothicPages .error {
+  border-color: #814538;
+  background: #341d19;
+  color: #f0c4b5;
+}
+
+.gothicPages .toast {
+  border: 1px solid #51483d;
+  background: #171615f5;
+  box-shadow: 0 10px 35px #0009;
+  color: #e8decb;
+}
+
+.gothicPages .finishDialog {
+  border-color: #51483d;
+  background: #171617;
+  color: #e8decb;
+}
+
+.gothicPages .finishDialog::backdrop {
+  background: #050506d9;
+}
+
+.gothicPages .finishDialog h2 {
+  color: #e8decb;
+}
+
+.gothicPages .finishDialogContent > p {
+  color: #b1a99e;
+}
+
+.gothicPages .finishScoreList {
+  border-color: #393330;
+  background: #111114;
+}
+
+.gothicPages .finishScoreRow + .finishScoreRow {
+  border-top-color: #393330;
+}
+
+.gothicPages .finishKeepButton {
+  border-color: #51483d;
+  background: #171617;
+  color: #d6cbb9;
+}
+
+.gothicPages .finishConfirmButton {
+  border-color: #a94720;
+  background: #a94720;
+  color: #f3e7d2;
+}
+
+.gothicPages .wordCheckerButton {
+  border-color: #6a5945;
+  background: #171615;
+  color: #e8decb;
+}
+
+.gothicPages .wordCheckerSheet,
+.gothicPages .wordCheckerResults {
+  border-color: #393330;
+  background: #171617;
+  color: #e8decb;
+}
+
+.gothicPages .wordCheckerLayer {
+  background: #050506c9;
+}
+
+.gothicPages .wordCheckerResults > p,
+.gothicPages .wordCheckerDefinition p {
+  color: #c9c0b2;
+}
+
+.gothicPages .wordCheckerVerdict,
+.gothicPages .wordCheckerDefinition {
+  border-color: #393330;
+}
+
+.gothicPages .wordCheckerVerdict.valid > span {
+  background: #263a2c;
+  color: #9ebfa2;
+}
+
+.gothicPages .wordCheckerVerdict.invalid > span {
+  background: #46261f;
+  color: #e0a18a;
+}
+
+@keyframes gothicFog {
+  from {
+    transform: translate3d(-2%, 0, 0) scale(1);
+    opacity: 0.45;
+  }
+
+  to {
+    transform: translate3d(2%, -5px, 0) scale(1.04);
+    opacity: 0.8;
+  }
+}
+
+@keyframes gothicScoreFlash {
+  0% {
+    background-color: #a9472055;
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 700px) {
+  .gothicPages.gameScreen > section {
+    padding-top: 10px;
+  }
+
+  .gothicPages.settingsScreen > section {
+    padding-top: 24px;
+  }
+}
+
+@media (max-width: 699px) {
+  .gothicPages .dashboardHero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gothicPages .heroCopy {
+    padding: 28px 22px;
+  }
+
+  .gothicPages .heroCopy h2 {
+    font-size: clamp(36px, 10vw, 48px);
+  }
+
+  .gothicPages .hauntedScene {
+    min-height: 220px;
+  }
+
+  .gothicPages .leaderboardHeading {
+    align-items: flex-start;
+  }
+
+  .gothicPages .leaderboardHeading > span {
+    max-width: 118px;
+  }
+
+  .gothicPages .leaderboardHeader,
+  .gothicPages .leaderboardRow {
+    column-gap: 7px;
+    grid-template-columns: 30px 36px minmax(0, 1fr) auto;
+  }
+
+  .gothicPages .leaderboardHeader {
+    padding-inline: 10px;
+    font-size: 8px;
+  }
+
+  .gothicPages .leaderboardRow {
+    min-height: 68px;
+    padding: 9px 10px;
+  }
+
+  .gothicPages .quick {
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gothicPages *,
+  .gothicPages *::before,
+  .gothicPages *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.hauntedDecorated > .hauntedDecorLayer {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hauntedDecorLayer svg,
+.hauntedDecorLayer i {
+  position: absolute;
+  pointer-events: none;
+}
+
+.hauntedPageWeb {
+  width: clamp(58px, 8vw, 100px);
+  color: #d3c9b9;
+  fill: none;
+  opacity: 0.2;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.hauntedPageWebLeft {
+  top: 74px;
+  left: max(8px, calc((100% - 1180px) / 2));
+}
+
+.hauntedPageWebRight {
+  top: 72px;
+  right: max(8px, calc((100% - 1180px) / 2));
+  transform: scaleX(-1);
+}
+
+.hauntedHangingSpider {
+  width: 20px;
+  color: #11100f;
+  fill: currentColor;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.4;
+  transform-origin: 50% 0;
+  animation: hauntedSpiderSway 9s ease-in-out infinite alternate;
+}
+
+.hauntedSilk {
+  fill: none;
+  stroke: #c9c1b4;
+  stroke-width: 0.8;
+}
+
+.hauntedHangingSpiderOne {
+  top: 0;
+  right: 8%;
+  height: 88px;
+}
+
+.hauntedHangingSpiderTwo {
+  top: 118px;
+  left: 8%;
+  height: 78px;
+  transform: scale(0.78);
+  animation-delay: -4s;
+}
+
+.hauntedFloatingGhost {
+  width: 54px;
+  fill: #d8d2c8;
+  opacity: 0.085;
+  animation: hauntedGhostFloat 34s ease-in-out infinite alternate;
+}
+
+.hauntedFloatingGhostOne {
+  top: 38%;
+  left: 3%;
+}
+
+.hauntedFloatingGhostTwo {
+  top: 68%;
+  right: 4%;
+  width: 42px;
+  animation-delay: -17s;
+}
+
+.hauntedBranch {
+  bottom: 8%;
+  width: clamp(65px, 9vw, 112px);
+  fill: none;
+  opacity: 0.15;
+  stroke: #b7aa96;
+  stroke-linecap: round;
+  stroke-width: 2.2;
+}
+
+.hauntedBranchLeft {
+  left: 0;
+}
+
+.hauntedBranchRight {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.hauntedBat {
+  top: 34%;
+  right: 17%;
+  width: 28px;
+  fill: #171514;
+  opacity: 0.56;
+  transform-origin: center;
+  animation: hauntedBatFlutter 15s ease-in-out infinite;
+}
+
+.hauntedDust {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #d8cbb5;
+  box-shadow: 0 0 7px #d8cbb555;
+  opacity: 0.3;
+  animation: hauntedDustDrift 28s ease-in-out infinite alternate;
+}
+
+.hauntedDustOne {
+  top: 22%;
+  left: 24%;
+}
+
+.hauntedDustTwo {
+  top: 58%;
+  left: 82%;
+  animation-delay: -8s;
+}
+
+.hauntedDustThree {
+  top: 76%;
+  left: 31%;
+  animation-delay: -15s;
+}
+
+.hauntedDustFour {
+  top: 43%;
+  left: 68%;
+  animation-delay: -21s;
+}
+
+.hauntedDecorated :is(
+  .modes button,
+  .player,
+  .gameCard,
+  .settingsCard,
+  .leaderboard,
+  .event,
+  .stats > div,
+  .chart
+) {
+  position: relative;
+}
+
+.hauntedDecorated .player {
+  padding: 4px 6px;
+  border: 1px solid #c9c1b414;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #d8cbb508, transparent 72%);
+}
+
+.hauntedDecorated :is(
+  .modes button,
+  .player,
+  .gameCard,
+  .settingsCard,
+  .leaderboard,
+  .event,
+  .stats > div,
+  .chart
+)::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      transparent 10px,
+      #c9c1b45c 10.5px 11px,
+      transparent 11.5px 20px,
+      #c9c1b44d 20.5px 21px,
+      transparent 21.5px 31px,
+      #c9c1b43d 31.5px 32px,
+      transparent 32.5px
+    ),
+    repeating-conic-gradient(
+      from 180deg at 100% 0,
+      #c9c1b43d 0deg 0.8deg,
+      transparent 0.8deg 18deg
+    );
+  content: "";
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.hauntedDecorated :is(.settingsCard, .chart)::after {
+  opacity: 0.22;
+}
+
+.hauntedDecorated .settingsCard {
+  box-shadow:
+    0 14px 36px #0005,
+    inset 0 1px #ffffff08,
+    inset 0 0 0 1px #c9c1b40d;
+}
+
+.hauntedDecorated .sectionHeading h2::after,
+.hauntedDecorated .leaderboardHeading h2::after {
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin-top: 9px;
+  background: linear-gradient(90deg, #a94720aa, #c9c1b420, transparent);
+  content: "";
+}
+
+@keyframes hauntedSpiderSway {
+  from {
+    rotate: -3deg;
+  }
+
+  to {
+    rotate: 3deg;
+  }
+}
+
+@keyframes hauntedGhostFloat {
+  from {
+    translate: -5px 4px;
+  }
+
+  to {
+    translate: 8px -13px;
+  }
+}
+
+@keyframes hauntedBatFlutter {
+  0%,
+  100% {
+    rotate: -2deg;
+    scale: 1;
+  }
+
+  50% {
+    rotate: 4deg;
+    scale: 0.92 1.08;
+  }
+}
+
+@keyframes hauntedDustDrift {
+  from {
+    translate: -3px 4px;
+    opacity: 0.12;
+  }
+
+  to {
+    translate: 7px -10px;
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 699px) {
+  .hauntedHangingSpiderTwo {
+    display: none;
+  }
+
+  .hauntedFloatingGhost {
+    width: 40px;
+  }
+
+  .hauntedFloatingGhostOne {
+    left: 1%;
+  }
+
+  .hauntedFloatingGhostTwo {
+    right: 1%;
+    width: 34px;
+  }
+
+  .hauntedBranch {
+    display: none;
+  }
+
+  .hauntedBat {
+    right: 9%;
+  }
+
+  .hauntedDecorated .player {
+    padding-inline: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hauntedDecorLayer *,
+  .hauntedDecorLayer *::before,
+  .hauntedDecorLayer *::after {
+    animation: none !important;
+  }
+}

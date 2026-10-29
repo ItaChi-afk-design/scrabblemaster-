@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./haunted-night.css";
 
 :root {
   --ink: #17352a;
@@ -1541,6 +1542,470 @@ label input,
   color: #775d20;
 }
 
+.throneRoomApp {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  min-height: 100svh;
+  padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  overflow: auto;
+  background: #0a0c17;
+  color: #f3eddf;
+}
+
+.throneRoomApp::before {
+  display: none;
+}
+
+.throneRoomShell {
+  display: flex;
+  width: min(100%, 1060px);
+  min-height: calc(100svh - max(40px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.throneRoomTopline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 2px 18px;
+}
+
+.throneRoomTopline > div {
+  min-width: 0;
+}
+
+.throneRoomTopline small {
+  color: #b7a5e8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.throneRoomTopline h1 {
+  margin: 5px 0 0;
+  color: #f6f0e5;
+  font: 700 27px Georgia, serif;
+}
+
+.throneRoomTopline p {
+  overflow-wrap: anywhere;
+  margin: 3px 0 0;
+  color: #a7a5b7;
+  font-size: 12px;
+}
+
+.throneRoomSound {
+  display: flex;
+  min-height: 39px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid #ffffff2b;
+  border-radius: 12px;
+  background: #ffffff0d;
+  color: #efebf7;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.throneRoomSound:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.throneRoomSound svg,
+.throneRoomActions svg {
+  width: 16px;
+  height: 16px;
+}
+
+.throneRoomScene {
+  position: relative;
+  display: flex;
+  min-height: min(620px, 67svh);
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 36px 16px 22px;
+  border: 1px solid #8a83a344;
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 50% 20%, #414270 0%, #23233d 31%, transparent 64%),
+    linear-gradient(180deg, #151625 0%, #1b1b2c 60%, #292838 100%);
+  box-shadow: inset 0 0 90px #070914b3, 0 22px 65px #03040d80;
+  text-align: center;
+}
+
+.throneRoomScene::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #11121d 0 5%, transparent 18% 82%, #11121d 95%),
+    linear-gradient(180deg, transparent 0 68%, #090a12 100%);
+  content: "";
+}
+
+.throneRoomScene::after {
+  position: absolute;
+  z-index: -1;
+  right: -15%;
+  bottom: -34%;
+  left: -15%;
+  height: 54%;
+  border: 1px solid #9a96b01c;
+  border-radius: 50% 50% 0 0;
+  background: repeating-linear-gradient(0deg, #9893b008 0 1px, transparent 1px 38px);
+  box-shadow: 0 -18px 55px #a59cdc10;
+  content: "";
+}
+
+.throneRoomArchitecture {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  display: flex;
+  height: 72%;
+  justify-content: space-around;
+  opacity: 0.65;
+}
+
+.throneRoomArchitecture i {
+  width: 8%;
+  height: 100%;
+  border-right: 1px solid #aeb0d01c;
+  border-left: 1px solid #06071152;
+  background: linear-gradient(90deg, #aaa7c00a, #090a141f 70%);
+  box-shadow: 8px 0 20px #00000029;
+}
+
+.throneRoomLight {
+  position: absolute;
+  z-index: -1;
+  top: -25%;
+  left: 50%;
+  width: 95%;
+  height: 68%;
+  background: radial-gradient(ellipse, #9b91e62b 0%, #6975c61b 35%, transparent 72%);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.85);
+  transition: opacity 900ms ease, transform 1400ms ease;
+}
+
+.throneRoomThrone {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: min(52%, 310px);
+  height: 52%;
+  opacity: 0;
+  transform: translate(-50%, 20px) scale(0.9);
+  transition: opacity 900ms ease, transform 1200ms cubic-bezier(0.18, 0.75, 0.23, 1);
+}
+
+.throneRoomBack {
+  position: absolute;
+  inset: 0 11% 17%;
+  border: 3px solid #84839855;
+  border-radius: 52% 52% 8px 8px;
+  background:
+    linear-gradient(90deg, #11121d, #3e3d55 16%, #27283d 50%, #3b394f 84%, #11121d),
+    #27283d;
+  box-shadow: inset 0 0 28px #080912b3, 0 0 38px #827ce22b;
+}
+
+.throneRoomBack::before,
+.throneRoomBack::after {
+  position: absolute;
+  top: 10%;
+  bottom: 8%;
+  width: 8%;
+  border: 1px solid #9e9ab13d;
+  background: linear-gradient(90deg, #12131e, #56546a 50%, #232435);
+  content: "";
+}
+
+.throneRoomBack::before {
+  left: -8%;
+}
+
+.throneRoomBack::after {
+  right: -8%;
+}
+
+.throneRoomCrest {
+  position: absolute;
+  z-index: 1;
+  top: -6%;
+  left: 50%;
+  width: 29%;
+  aspect-ratio: 1;
+  border: 2px solid #b5a8e77a;
+  background: linear-gradient(135deg, #5c587a, #1a1b2a);
+  box-shadow: 0 0 25px #9a8fea42;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.throneRoomSeat {
+  position: absolute;
+  right: 0;
+  bottom: 9%;
+  left: 0;
+  height: 25%;
+  border: 3px solid #9692a55c;
+  border-radius: 14px 14px 7px 7px;
+  background: linear-gradient(180deg, #555267, #272838 75%);
+  box-shadow: 0 15px 20px #0008;
+}
+
+.throneRoomArm {
+  position: absolute;
+  z-index: 2;
+  bottom: 8%;
+  width: 20%;
+  height: 30%;
+  border: 3px solid #8a87985e;
+  border-radius: 18px 18px 5px 5px;
+  background: linear-gradient(90deg, #272838, #555267 55%, #1b1c2a);
+}
+
+.throneRoomArmLeft {
+  left: -2%;
+}
+
+.throneRoomArmRight {
+  right: -2%;
+}
+
+.throneRoomWinner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 500px);
+  margin-top: clamp(75px, 16svh, 150px);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 800ms ease, transform 900ms ease;
+}
+
+.throneRoomCrown {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  margin: 0 auto 8px;
+  border: 1px solid #d6bd785c;
+  border-radius: 50%;
+  background: #c99c3b1a;
+  color: #efd38e;
+}
+
+.throneRoomCrown svg {
+  width: 21px;
+}
+
+.throneRoomRulers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.throneRoomRuler {
+  min-width: min(100%, 190px);
+  padding: 8px 15px;
+  border: 1px solid #d5c58b54;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #222237ef, #11121eea);
+  box-shadow: 0 10px 28px #060711b3, 0 0 22px #ac9ce326;
+}
+
+.throneRoomPlayerMark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border: 1px solid #ffffff8c;
+  border-radius: 50%;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.throneRoomRuler .throneRoomPlayerMark {
+  width: 11px;
+  height: 11px;
+}
+
+.throneRoomRuler h2 {
+  overflow-wrap: anywhere;
+  margin: 5px 0 0;
+  color: #fffaf0;
+  font: 700 clamp(24px, 5vw, 39px) Georgia, serif;
+  text-shadow: 0 3px 18px #a99cf06e;
+}
+
+.throneRoomRuler strong {
+  color: #efd38e;
+  font: 700 23px Georgia, serif;
+}
+
+.throneRoomRuler strong span {
+  font: 800 9px Arial, sans-serif;
+  letter-spacing: 1.5px;
+}
+
+.throneRoomWinner > p {
+  margin: 8px 0 0;
+  color: #d3cede;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.throneRoomKneelers {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 620px);
+  margin: auto 0 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 850ms ease, transform 950ms ease;
+}
+
+.throneRoomKneelers > p {
+  margin: 0 0 8px;
+  color: #aaa4c2;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.throneRoomKneelers ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr));
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.throneRoomKneeler {
+  display: flex;
+  min-width: 0;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid #b5b0d02c;
+  border-radius: 12px;
+  background: #10111cbb;
+  text-align: left;
+}
+
+.throneRoomKneelerName {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+  color: #f1ebdf;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.throneRoomKneeler strong {
+  flex: none;
+  color: #ded3ad;
+  font: 700 14px Georgia, serif;
+}
+
+.throneRoomKneeler strong small {
+  color: #a8a2b3;
+  font: 800 8px Arial, sans-serif;
+  letter-spacing: 1px;
+}
+
+.throneRoomStageAnnouncement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.throneRoomScene[data-stage="throne"] .throneRoomLight,
+.throneRoomScene[data-stage="ruler"] .throneRoomLight,
+.throneRoomScene[data-stage="kneeling"] .throneRoomLight {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.throneRoomScene[data-stage="throne"] .throneRoomThrone,
+.throneRoomScene[data-stage="ruler"] .throneRoomThrone,
+.throneRoomScene[data-stage="kneeling"] .throneRoomThrone {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.throneRoomScene[data-stage="ruler"] .throneRoomWinner,
+.throneRoomScene[data-stage="kneeling"] .throneRoomWinner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.throneRoomScene[data-stage="kneeling"] .throneRoomKneelers {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.throneRoomSoundError {
+  margin: 8px 0 0;
+  color: #f0c6bd;
+  font-size: 12px;
+}
+
+.throneRoomActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 15px 0 0;
+}
+
+.throneRoomActions button {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border: 1px solid #ffffff2e;
+  border-radius: 12px;
+  background: #ffffff0d;
+  color: #f3eddf;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.throneRoomActions .throneRoomReplay {
+  grid-column: 1 / -1;
+  min-height: 41px;
+  background: transparent;
+  color: #c9c2d7;
+}
+
+.throneRoomActions .throneRoomNewGame {
+  border-color: #c99c3b;
+  background: #c99c3b;
+  color: #211b0c;
+}
+
 @media (max-width: 899px) {
   .headerLinks,
   .headerNew {
@@ -1760,6 +2225,31 @@ label input,
   }
 }
 
+@media (min-width: 700px) {
+  .throneRoomApp {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
+  .throneRoomTopline h1 {
+    font-size: 34px;
+  }
+
+  .throneRoomScene {
+    min-height: 620px;
+    padding-top: 45px;
+  }
+
+  .throneRoomActions {
+    grid-template-columns: auto 1fr 1fr;
+  }
+
+  .throneRoomActions .throneRoomReplay {
+    grid-column: auto;
+    min-height: 46px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1768,5 +2258,863 @@ label input,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+.throneRoomApp {
+  z-index: 20;
+  padding: max(10px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom));
+  overflow: auto;
+  background:
+    radial-gradient(ellipse at 50% 34%, #0879d65c, transparent 53%),
+    linear-gradient(180deg, #04152d, #061d3b 54%, #020b1a);
+  color: #eef7ff;
+}
+
+.throneRoomShell {
+  width: min(100%, 1280px);
+  min-height: calc(100svh - max(20px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+  display: grid;
+  grid-template-rows: auto minmax(440px, 1fr) auto;
+}
+
+.throneRoomTopline {
+  position: relative;
+  display: block;
+  padding: 5px 75px 10px;
+  text-align: center;
+}
+
+.throneRoomTopline small {
+  color: #7ad8ff;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 14px #21a8ff;
+}
+
+.throneRoomTopline h1 {
+  margin: 3px 0 0;
+  color: #eff8ff;
+  font: 900 clamp(22px, 5.2vw, 56px)/0.94 Arial, sans-serif;
+  letter-spacing: -1.5px;
+  text-shadow: 0 3px 0 #064d9a, 0 0 19px #36aaffb5;
+  transform: skew(-7deg);
+}
+
+.throneRoomTopline h1 span,
+.throneRoomTopline h1 em {
+  color: #9de5ff;
+  font-size: 0.68em;
+  font-style: italic;
+}
+
+.throneRoomTopline p {
+  margin: 4px 0 0;
+  color: #c2eaff;
+  font-size: 10px;
+}
+
+.throneRoomSound {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  min-height: 36px;
+  border-color: #9edfff65;
+  background: #04152dbf;
+  color: #eaf8ff;
+}
+
+.throneRoomScene {
+  min-height: max(440px, min(1000px, calc(100svh - 235px)));
+  padding: 0;
+  border: 1px solid #53bafc55;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse at 50% 44%, #168be166 0, #1265b840 25%, transparent 58%),
+    radial-gradient(ellipse at 50% 100%, #075ab5 0, #063269 39%, transparent 70%),
+    linear-gradient(180deg, #062957 0%, #074b8e 43%, #051c3b 100%);
+  box-shadow: inset 0 0 75px #00132ebd, 0 15px 50px #000b;
+}
+
+.throneRoomScene::before {
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 20%, #04132870 86%),
+    repeating-linear-gradient(104deg, transparent 0 25px, #76d6ff0b 26px 28px, transparent 29px 58px),
+    linear-gradient(180deg, #0312291c 0 62%, #020c1dbf 100%);
+}
+
+.throneRoomScene::after {
+  right: -12%;
+  bottom: -34%;
+  left: -12%;
+  height: 45%;
+  border-color: #88d9ff4d;
+  background:
+    repeating-linear-gradient(0deg, #a4e7ff18 0 1px, transparent 2px 32px),
+    repeating-linear-gradient(90deg, transparent 0 68px, #a4e7ff1c 69px 70px, transparent 71px 138px),
+    linear-gradient(180deg, #0d6bc277, #02122d);
+  box-shadow: 0 -18px 55px #39b9ff36;
+}
+
+.monarchArchitecture {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.monarchArch {
+  position: absolute;
+  top: -17%;
+  left: 12%;
+  width: 76%;
+  height: 82%;
+  border: 2px solid #8bdfff45;
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0;
+  box-shadow: 0 0 40px #169fff2e, inset 0 20px 35px #0e8bdf22;
+}
+
+.monarchArch::before,
+.monarchArch::after {
+  position: absolute;
+  top: 9%;
+  bottom: 0;
+  width: 1px;
+  background: #91e0ff36;
+  content: "";
+}
+
+.monarchArch::before { left: 12%; }
+.monarchArch::after { right: 12%; }
+
+.monarchColumns {
+  position: absolute;
+  inset: 4% 0 20%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.monarchColumns i {
+  width: 7%;
+  border-right: 1px solid #8fe4ff3b;
+  border-left: 1px solid #00102c99;
+  background: linear-gradient(90deg, #00142c55, #3cbaff30 48%, #00132d66);
+  box-shadow: inset 0 0 18px #3cbaff24, 0 0 20px #0007;
+}
+
+.monarchLight {
+  position: absolute;
+  z-index: 0;
+  top: 1%;
+  left: 50%;
+  width: 70%;
+  height: 82%;
+  background: radial-gradient(ellipse, #54c5ff57, #1596ff24 39%, transparent 72%);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.8);
+  transition: opacity 900ms ease, transform 1400ms ease;
+}
+
+.throneRoomScene[data-stage="throne"] .monarchLight,
+.throneRoomScene[data-stage="ruler"] .monarchLight,
+.throneRoomScene[data-stage="kneeling"] .monarchLight {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.monarchLeaderboard {
+  position: absolute;
+  z-index: 5;
+  top: 13px;
+  left: 13px;
+  width: min(185px, 39%);
+  overflow: hidden;
+  border: 1px solid #2fcaff;
+  border-radius: 9px;
+  background: #04162be8;
+  box-shadow: 0 5px 23px #00102db0, inset 0 0 18px #008be31c;
+}
+
+.monarchLeaderboard ol {
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+}
+
+.monarchLeaderboard li {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 6px;
+  color: #b7eaff;
+  font-size: 11px;
+}
+
+.monarchLeaderboard li + li {
+  border-top: 1px solid #70d7ff21;
+}
+
+.monarchLeaderboard li.isChampion {
+  border: 1px solid #edc85f;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #654712, #122343);
+  color: #fff0b0;
+}
+
+.monarchRank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #69d7ff;
+  font-weight: 800;
+}
+
+.monarchRank svg {
+  width: 15px;
+  height: 15px;
+  color: #ffd86a;
+}
+
+.monarchPlayerName {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monarchLeaderboard strong {
+  color: #f5e3a8;
+  font-variant-numeric: tabular-nums;
+}
+
+.throneRoomThrone {
+  top: 22%;
+  width: min(58%, 460px);
+  height: 66%;
+  opacity: 0;
+  transform: translate(-50%, 20px) scale(0.9);
+  transition: opacity 900ms ease, transform 1200ms cubic-bezier(0.18, 0.75, 0.23, 1);
+}
+
+.throneRoomBack {
+  inset: 0 11% 17%;
+  border: 4px solid #7ecdf369;
+  border-radius: 44% 44% 8px 8px;
+  background:
+    linear-gradient(90deg, #051a38, #125794 17%, #0b315d 50%, #125794 83%, #04142f),
+    #092b56;
+  box-shadow: inset 0 0 32px #000c, 0 0 44px #36aaff52;
+}
+
+.throneRoomBack::before,
+.throneRoomBack::after {
+  border-color: #a4e2ff60;
+  background: linear-gradient(90deg, #062044, #2078b3 50%, #062044);
+}
+
+.throneRoomSeat {
+  bottom: 8%;
+  height: 24%;
+  border-color: #97e4ff73;
+  background: linear-gradient(180deg, #267cb3, #07315f 72%);
+  box-shadow: 0 15px 20px #000a, inset 0 3px 0 #9de4ff50;
+}
+
+.throneRoomArm {
+  bottom: 7%;
+  border-color: #8dd9ff70;
+  background: linear-gradient(90deg, #062653, #2582bb 55%, #041631);
+  box-shadow: 0 10px 20px #0009;
+}
+
+.monarchFigure {
+  position: absolute;
+  z-index: 3;
+  top: 9%;
+  left: 50%;
+  width: 72%;
+  height: 87%;
+  transform: translateX(-50%);
+}
+
+.monarchFigureCrown {
+  position: absolute;
+  z-index: 4;
+  top: -3%;
+  left: 50%;
+  width: 31%;
+  height: 22%;
+  color: #ffe477;
+  fill: #f2bf35;
+  filter: drop-shadow(0 0 10px #ffdb64);
+  transform: translateX(-50%);
+}
+
+.monarchFigureHead {
+  position: absolute;
+  top: 13%;
+  left: 50%;
+  width: 27%;
+  height: 23%;
+  border: 2px solid #65bdf5;
+  border-radius: 45% 45% 40% 40%;
+  background: linear-gradient(90deg, #071b38, #367eb0 48%, #071b38);
+  box-shadow: inset 0 -8px 0 #061a36, 0 0 12px #63caff;
+  transform: translateX(-50%);
+}
+
+.monarchFigureHead::after {
+  position: absolute;
+  right: 27%;
+  bottom: 27%;
+  left: 27%;
+  height: 2px;
+  background: #90d9ff;
+  box-shadow: 0 7px 0 #07152b, 0 12px 0 #68b9eb;
+  content: "";
+}
+
+.monarchFigureShoulders {
+  position: absolute;
+  top: 31%;
+  left: 50%;
+  width: 77%;
+  height: 24%;
+  border: 3px solid #80d5ff;
+  background: linear-gradient(120deg, #123f70, #3f8dc1 45%, #0b2b51 75%);
+  clip-path: polygon(22% 0, 78% 0, 100% 76%, 50% 100%, 0 76%);
+  filter: drop-shadow(0 0 8px #2eaaff);
+  transform: translateX(-50%);
+}
+
+.monarchFigureRobe {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  width: 92%;
+  height: 53%;
+  border: 3px solid #7dd5ff;
+  background:
+    linear-gradient(90deg, #071c3a, #1d69a2 23%, #0a2e59 50%, #1d69a2 77%, #061a38),
+    #103d6a;
+  clip-path: polygon(21% 0, 79% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 0 8px #248ed5);
+  transform: translateX(-50%);
+}
+
+.throneRoomScene[data-stage="throne"] .throneRoomThrone,
+.throneRoomScene[data-stage="ruler"] .throneRoomThrone,
+.throneRoomScene[data-stage="kneeling"] .throneRoomThrone {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.throneRoomWinner {
+  position: absolute;
+  z-index: 4;
+  top: 52%;
+  left: 50%;
+  width: min(72%, 440px);
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  text-align: center;
+  transform: translate(-50%, 18px);
+  transition: opacity 800ms ease, transform 900ms ease;
+}
+
+.monarchWinnerCrown {
+  display: grid;
+  width: 31px;
+  height: 27px;
+  place-items: center;
+  margin: 0 auto -2px;
+  color: #ffe36f;
+  filter: drop-shadow(0 0 7px #ffc93d);
+}
+
+.monarchWinnerCrown svg {
+  width: 28px;
+  height: 28px;
+  fill: #f7c84c;
+}
+
+.monarchWinnerNames {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.monarchWinnerNames article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  width: min(100%, 280px);
+  padding: 6px 12px;
+  border: 1px solid #ffdc72;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #051832f2, #0c4078f2, #051832f2);
+  box-shadow: 0 0 17px #ffc84978, 0 5px 16px #00142dbb;
+  color: #fff0b0;
+  text-align: left;
+}
+
+.monarchWinnerNames h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #fff0b0;
+  font: 700 20px Georgia, serif;
+  text-shadow: 0 0 9px #ffd45190;
+}
+
+.throneRoomScene[data-stage="ruler"] .throneRoomWinner,
+.throneRoomScene[data-stage="kneeling"] .throneRoomWinner {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.monarchCourt {
+  position: absolute;
+  z-index: 6;
+  right: 1%;
+  bottom: 4%;
+  left: 1%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 3px;
+}
+
+.monarchCourtMember {
+  display: flex;
+  width: min(18%, 110px);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 850ms ease, transform 950ms ease;
+}
+
+.monarchKneeler {
+  position: relative;
+  display: block;
+  width: clamp(32px, 8vw, 72px);
+  height: clamp(42px, 10vw, 88px);
+  filter: drop-shadow(0 7px 4px #000b);
+}
+
+.monarchKneeler::before {
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  width: 42%;
+  height: 40%;
+  border: 1px solid #80d9ff99;
+  border-radius: 48% 48% 35% 35%;
+  background: radial-gradient(ellipse at 50% 30%, #2d7daf, #06172e 74%);
+  box-shadow: 0 0 10px #32aaff6b;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.monarchKneeler::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 65%;
+  border: 1px solid #65caff9c;
+  border-radius: 47% 47% 12% 12%;
+  background:
+    linear-gradient(90deg, #071730, #1671a8 50%, #06162d),
+    #0d3d6c;
+  clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
+  content: "";
+}
+
+.monarchKneeler i {
+  position: absolute;
+  z-index: 1;
+  top: 24%;
+  left: 50%;
+  width: 34%;
+  height: 4px;
+  border-radius: 50%;
+  background: #83dfff;
+  box-shadow: 0 0 9px #20aaff;
+  transform: translateX(-50%);
+}
+
+.monarchCourtMember:nth-child(odd) .monarchKneeler::after {
+  background: linear-gradient(90deg, #141742, #514c9c 50%, #11132f);
+}
+
+.monarchCourtMember:nth-child(3n) .monarchKneeler::after {
+  background: linear-gradient(90deg, #063f50, #148c9a 50%, #042b40);
+}
+
+.monarchCourtLabel {
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3px;
+  padding: 3px 7px;
+  border: 1px solid #20c6ff;
+  border-radius: 999px;
+  background: #03152dea;
+  box-shadow: 0 0 10px #09aaff8c;
+  color: #c8efff;
+  line-height: 1.1;
+}
+
+.monarchCourtLabel b {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: clamp(8px, 2.3vw, 12px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.throneRoomStageAnnouncement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.throneRoomScene[data-stage="kneeling"] .monarchCourtMember {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.throneRoomActions {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 7px;
+  padding: 9px 0 0;
+}
+
+.throneRoomActions button {
+  min-height: 40px;
+  border-color: #55c5ff6e;
+  background: #041a35;
+  color: #dbf4ff;
+  font-size: 11px;
+}
+
+.throneRoomActions .throneRoomReplay {
+  grid-column: 1 / -1;
+  min-height: 34px;
+  background: transparent;
+  color: #9ddfff;
+}
+
+.throneRoomActions .throneRoomNewGame {
+  border-color: #f2c64f;
+  background: #f2c64f;
+  color: #1d2534;
+}
+
+.throneRoomSoundError {
+  color: #ffd0c7;
+}
+
+@media (max-width: 480px) {
+  .throneRoomTopline {
+    padding-right: 60px;
+    padding-left: 60px;
+  }
+
+  .throneRoomTopline h1 {
+    font-size: clamp(19px, 6.2vw, 29px);
+    letter-spacing: -1px;
+  }
+
+  .throneRoomTopline small {
+    font-size: 7px;
+    letter-spacing: 1.3px;
+  }
+
+  .throneRoomTopline p {
+    font-size: 9px;
+  }
+
+  .throneRoomSound {
+    width: 40px;
+    padding: 0;
+  }
+
+  .throneRoomSound span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .throneRoomScene {
+    min-height: max(440px, calc(100svh - 255px));
+    border-radius: 13px;
+  }
+
+  .monarchLeaderboard {
+    top: 9px;
+    left: 8px;
+    width: min(170px, 43%);
+  }
+
+  .monarchLeaderboard li {
+    grid-template-columns: 20px minmax(0, 1fr) auto;
+    gap: 3px;
+    padding: 4px 3px;
+    font-size: 10px;
+  }
+
+  .throneRoomThrone {
+    top: 25%;
+    width: 67%;
+    height: 63%;
+  }
+
+  .throneRoomWinner {
+    top: 53%;
+    width: 76%;
+  }
+
+  .monarchWinnerNames h2 {
+    font-size: 17px;
+  }
+
+  .monarchCourt {
+    right: 0;
+    left: 0;
+    gap: 1px;
+  }
+
+  .monarchCourtMember {
+    width: 19%;
+  }
+}
+
+@media (min-width: 700px) {
+  .throneRoomApp {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .throneRoomTopline {
+    padding-top: 8px;
+    padding-bottom: 14px;
+  }
+
+  .throneRoomTopline h1 {
+    font-size: clamp(34px, 4vw, 56px);
+  }
+
+  .throneRoomScene {
+    min-height: max(620px, calc(100svh - 250px));
+  }
+
+  .monarchLeaderboard {
+    top: 18px;
+    left: 18px;
+  }
+
+  .monarchLeaderboard li {
+    font-size: 13px;
+  }
+
+  .throneRoomActions {
+    grid-template-columns: auto 1fr 1fr;
+    gap: 10px;
+    padding-top: 12px;
+  }
+
+  .throneRoomActions .throneRoomReplay {
+    grid-column: auto;
+    min-height: 40px;
+  }
+}
+
+.throneRoomApp {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+  background: #04152c;
+}
+
+.throneRoomShell {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.throneRoomSound {
+  z-index: 8;
+  top: 2%;
+  right: 2%;
+}
+
+.throneRoomScene {
+  width: 100%;
+  min-height: 0;
+  flex: none;
+  aspect-ratio: 948 / 1659;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #06254b url("/throne-version2.png") center / 100% 100% no-repeat;
+  box-shadow: none;
+}
+
+.throneRoomScene::before,
+.throneRoomScene::after {
+  display: none;
+}
+
+.monarchLeaderboard {
+  top: 2%;
+  left: 2%;
+  width: 23%;
+  border-color: #25c9ff;
+  border-radius: 5px;
+  background: #03142de8;
+}
+
+.monarchLeaderboard ol {
+  padding: 3px;
+}
+
+.monarchLeaderboard li {
+  grid-template-columns: 15px minmax(0, 1fr) auto;
+  gap: 2px;
+  padding: 3px 2px;
+  font-size: clamp(7px, 2.2vw, 11px);
+}
+
+.monarchRank svg {
+  width: 11px;
+  height: 11px;
+}
+
+.throneRoomWinner {
+  top: 44.8%;
+  left: 50%;
+  width: min(80%, 400px);
+  margin: 0;
+  transform: translate(-50%, 14px);
+}
+
+.monarchWinnerCrown {
+  width: 25px;
+  height: 22px;
+}
+
+.monarchWinnerCrown svg {
+  width: 23px;
+  height: 23px;
+}
+
+.monarchWinnerNames article {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  padding: 1px 14px;
+  border: 0;
+  border-top: 1px solid #ffda61;
+  border-bottom: 1px solid #ffda61;
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, #031a36de 18%, #031a36de 82%, transparent);
+  box-shadow: 0 0 10px #ffc84978;
+  text-align: center;
+}
+
+.monarchWinnerNames h2 {
+  font-size: clamp(15px, 4.5vw, 24px);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.monarchCourt {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.monarchCourtMember {
+  position: absolute;
+  display: block;
+  width: max-content;
+  max-width: 30%;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+}
+
+.monarchCourtMember:nth-child(1) { top: 72.8%; left: 17.2%; }
+.monarchCourtMember:nth-child(2) { top: 74.8%; left: 41.7%; }
+.monarchCourtMember:nth-child(3) { top: 72.5%; left: 81.5%; }
+.monarchCourtMember:nth-child(4) { top: 83%; left: 17.3%; }
+.monarchCourtMember:nth-child(5) { top: 70.5%; left: 30.8%; }
+.monarchCourtMember:nth-child(6) { top: 80.5%; left: 81.5%; }
+
+.monarchCourtLabel {
+  display: flex;
+  width: auto;
+  max-width: 100%;
+  min-height: 22px;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  padding: 3px 6px;
+  border-color: #1bcaff;
+  border-radius: 999px;
+  background: #00152fe8;
+  box-shadow: 0 0 8px #0abaff;
+}
+
+.monarchCourtLabel b {
+  overflow-wrap: anywhere;
+  font-size: clamp(8px, 2.5vw, 12px);
+  text-align: center;
+  white-space: normal;
+}
+
+.throneRoomActions {
+  flex: none;
+  padding-top: 0;
+}
+
+@media (min-width: 700px) {
+  .throneRoomShell {
+    width: min(100%, 850px);
+    min-height: 0;
+    margin: 0 auto;
+  }
+
+  .throneRoomScene {
+    width: min(100%, calc((100svh - 180px) * 948 / 1659));
+    margin: 0 auto;
+  }
+
+  .monarchLeaderboard li {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    padding: 5px 4px;
+  }
+
+  .monarchWinnerNames h2 {
+    font-size: 24px;
   }
 }

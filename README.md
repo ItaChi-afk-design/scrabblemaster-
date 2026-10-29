@@ -13,6 +13,13 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Halloween event theme
+
+The Wordkeeper: Haunted Night presentation is isolated in `app/haunted-night.css` and enabled by
+the `hauntedTheme` class on the app roots. To disable the event, remove its import from
+`app/globals.css` and the class from `app/page.tsx` and `app/throne-room.tsx`; the game logic and
+saved data are independent of the theme.
+
 ## Word checker configuration
 
 The server-side word-check route includes the ENABLE2K dictionary in the build

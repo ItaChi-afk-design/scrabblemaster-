@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { WordChecker } from "./word-checker";
+import { ThroneRoom } from "./throne-room";
 import { readStoredJson, removeStoredValue, writeStoredJson } from "./lib/browser-storage";
 
 /* ============================================================
@@ -69,6 +70,7 @@ type View =
   | "game"
   | "history"
   | "stats"
+  | "throne"
   | "results"
   | "settings";
 
@@ -78,7 +80,7 @@ type View =
 
 const STORAGE_KEY = "scrabble-score-v2";
 const COLORS = ["#c66551", "#4b927f", "#c89835", "#6e79b5", "#a35c91"];
-const MAX_PLAYERS = 7;
+const MAX_PLAYERS = 5;
 const ANIMAL_AVATARS = [
   "https://images.unsplash.com/photo-1552053831-71594a27632d",
   "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
@@ -120,6 +122,18 @@ const getInitials = (name: string) =>
     .join("")
     .slice(0, 2)
     .toUpperCase() || "?";
+
+const rankPlayers = (players: Player[]) => {
+  const ranked = [...players].sort((a, b) => b.score - a.score);
+  const highScore = ranked[0]?.score ?? 0;
+  const winners = ranked.filter((player) => player.score === highScore);
+  return {
+    ranked,
+    highScore,
+    winners,
+    kneelingPlayers: ranked.filter((player) => player.score < highScore),
+  };
+};
 
 // Creates a brand new default game
 const createFreshGame = (now: number): Game => ({
@@ -320,6 +334,60 @@ function Empty({ title, text }: { title: string; text: string }) {
   );
 }
 
+function HauntedDecorations() {
+  return (
+    <div className="hauntedDecorLayer" aria-hidden="true">
+      <svg className="hauntedPageWeb hauntedPageWebLeft" viewBox="0 0 100 100">
+        <path d="M0 0H100M0 0V100M0 0L72 72M0 0L100 35M0 0L35 100M12 0C12 12 0 12 0 12M30 0C30 30 0 30 0 30M50 0C50 50 0 50 0 50M70 0C70 70 0 70 0 70" />
+      </svg>
+      <svg className="hauntedPageWeb hauntedPageWebRight" viewBox="0 0 100 100">
+        <path d="M0 0H100M0 0V100M0 0L72 72M0 0L100 35M0 0L35 100M12 0C12 12 0 12 0 12M30 0C30 30 0 30 0 30M50 0C50 50 0 50 0 50M70 0C70 70 0 70 0 70" />
+      </svg>
+      <svg className="hauntedHangingSpider hauntedHangingSpiderOne" viewBox="0 0 24 88">
+        <path className="hauntedSilk" d="M12 0V59" />
+        <g className="hauntedSpiderBody">
+          <circle cx="12" cy="65" r="2" />
+          <ellipse cx="12" cy="70" rx="3.5" ry="5" />
+          <path d="M9 65 4 62M9 68 3 68M9 71 4 75M15 65 20 62M15 68 21 68M15 71 20 75" />
+        </g>
+      </svg>
+      <svg className="hauntedHangingSpider hauntedHangingSpiderTwo" viewBox="0 0 24 88">
+        <path className="hauntedSilk" d="M12 0V59" />
+        <g className="hauntedSpiderBody">
+          <circle cx="12" cy="65" r="2" />
+          <ellipse cx="12" cy="70" rx="3.5" ry="5" />
+          <path d="M9 65 4 62M9 68 3 68M9 71 4 75M15 65 20 62M15 68 21 68M15 71 20 75" />
+        </g>
+      </svg>
+      <svg className="hauntedFloatingGhost hauntedFloatingGhostOne" viewBox="0 0 64 84">
+        <path d="M32 4C16 4 7 17 7 34v39l11-8 9 10 10-10 10 9V34C47 17 40 4 32 4Z" />
+        <ellipse cx="24" cy="34" rx="2.2" ry="3.4" />
+        <ellipse cx="39" cy="34" rx="2.2" ry="3.4" />
+        <path d="M27 44c3 3 7 3 10 0" />
+      </svg>
+      <svg className="hauntedFloatingGhost hauntedFloatingGhostTwo" viewBox="0 0 64 84">
+        <path d="M32 4C16 4 7 17 7 34v39l11-8 9 10 10-10 10 9V34C47 17 40 4 32 4Z" />
+        <ellipse cx="24" cy="34" rx="2.2" ry="3.4" />
+        <ellipse cx="39" cy="34" rx="2.2" ry="3.4" />
+        <path d="M27 44c3 3 7 3 10 0" />
+      </svg>
+      <svg className="hauntedBranch hauntedBranchLeft" viewBox="0 0 120 240">
+        <path d="M5 238C30 194 24 154 48 116S68 47 103 4M39 132 8 96M45 121 77 92M67 71 53 38M79 54 112 39M25 181 2 154" />
+      </svg>
+      <svg className="hauntedBranch hauntedBranchRight" viewBox="0 0 120 240">
+        <path d="M5 238C30 194 24 154 48 116S68 47 103 4M39 132 8 96M45 121 77 92M67 71 53 38M79 54 112 39M25 181 2 154" />
+      </svg>
+      <svg className="hauntedBat" viewBox="0 0 48 24">
+        <path d="M24 8C17 1 11 2 6 4l3 7L1 8l3 12 9-5 5 7 6-7 6 7 5-7 9 5 3-12-8 3 3-7c-5-2-11-3-18 4Z" />
+      </svg>
+      <i className="hauntedDust hauntedDustOne" />
+      <i className="hauntedDust hauntedDustTwo" />
+      <i className="hauntedDust hauntedDustThree" />
+      <i className="hauntedDust hauntedDustFour" />
+    </div>
+  );
+}
+
 function GameCard({
   game,
   on,
@@ -431,7 +499,10 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
+  const [pumpkinClicks, setPumpkinClicks] = useState(0);
+  const [scoreFlash, setScoreFlash] = useState<{ playerId: string; id: string } | null>(null);
   const storageWarningShown = useRef(false);
+  const scoreFlashTimer = useRef<number | undefined>(undefined);
 
   /* ---------- Derived values & refs ---------- */
   const game = games.find((g) => g.id === selected);
@@ -453,6 +524,13 @@ export default function App() {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   }, []);
+
+  useEffect(
+    () => () => {
+      if (scoreFlashTimer.current !== undefined) window.clearTimeout(scoreFlashTimer.current);
+    },
+    [],
+  );
 
   /* ---------- Timer sounds ---------- */
 
@@ -746,6 +824,10 @@ export default function App() {
   // Add points for the current player, then pass the turn
   const addScore = (points: number, now: number) => {
     if (!game || !Number.isFinite(points) || !points) return;
+    const scoredPlayer = game.players[game.current];
+    if (scoreFlashTimer.current !== undefined) window.clearTimeout(scoreFlashTimer.current);
+    setScoreFlash({ playerId: scoredPlayer.id, id: uid(now) });
+    scoreFlashTimer.current = window.setTimeout(() => setScoreFlash(null), 650);
 
     patch(game.id, (g) => {
       const player = g.players[g.current];
@@ -815,6 +897,19 @@ export default function App() {
     setView("create");
   };
 
+  const clickHauntedBadge = () =>
+    say("A whisper from beyond: the best words are written after dark.");
+
+  const clickPumpkin = () => {
+    if (pumpkinClicks === 2) {
+      setPumpkinClicks(0);
+      say("The pumpkin grins. The spirits are listening...");
+      return;
+    }
+
+    setPumpkinClicks((count) => count + 1);
+  };
+
   /* ---------- Shared layout pieces ---------- */
 
   const Header = ({ title, back = true }: { title: string; back?: boolean }) => (
@@ -822,7 +917,7 @@ export default function App() {
       <button
         className="icon"
         onClick={() => (back ? setView(game ? "game" : "home") : goHome())}
-        aria-label={back ? "Back" : "ScrabbleScore home"}
+        aria-label={back ? "Back" : "Wordkeeper home"}
       >
         {back ? (
           <ChevronLeft />
@@ -891,7 +986,8 @@ export default function App() {
       });
 
     return (
-      <main className="app">
+      <main className="app hauntedTheme gothicPages hauntedDecorated">
+        <HauntedDecorations />
         <Header title="New game" />
         <section>
           <label>
@@ -1053,12 +1149,18 @@ export default function App() {
           : "TIME EXPIRED";
     const finishGame = () => {
       finishDialogRef.current?.close();
-      save({ ...game, status: "finished", running: false });
-      setView("results");
+      patch(game.id, (current) => ({
+        ...current,
+        status: "finished",
+        running: false,
+        pauseUntil: undefined,
+      }));
+      setView("throne");
     };
 
     return (
-      <main className="app gameScreen">
+      <main className="app hauntedTheme gameScreen gothicPages hauntedDecorated">
+        <HauntedDecorations />
         <Header title={game.title} back={false} />
         <section>
           {/* Timer */}
@@ -1099,8 +1201,8 @@ export default function App() {
 
           <div className="leaderboardHeading">
             <div>
-              <small>LIVE RANKINGS</small>
-              <h2>Leaderboard</h2>
+              <small>THE HAUNTED RANKINGS</small>
+              <h2>Haunted leaderboard</h2>
             </div>
             <span>Tap a player to select their turn</span>
           </div>
@@ -1120,19 +1222,22 @@ export default function App() {
 
                 return (
                   <li
-                    className="leaderboardItem"
+                    className={`leaderboardItem ${scoreFlash?.playerId === p.id ? "scoreFlash" : ""}`}
                     key={`${p.id}-${rank}`}
                     style={{ animationDelay: `${Math.min(i * 45, 180)}ms` }}
                   >
                     <button
-                      className={`leaderboardRow ${isCurrent ? "current" : ""}`}
+                      className={`leaderboardRow ${isCurrent ? "current" : ""} ${
+                        scoreFlash?.playerId === p.id ? "scored" : ""
+                      }`}
+                      key={scoreFlash?.playerId === p.id ? scoreFlash.id : p.id}
                       onClick={() => save({ ...game, current: playerIndex, lastTick: Date.now() })}
                       aria-label={`Rank ${rank}, ${p.name}, ${p.score} points${
                         isCurrent ? ", playing now" : ""
                       }. Select this player as the current turn`}
                     >
                       <span className={`leaderboardRank ${rank === 1 ? "isLeader" : ""}`}>
-                        {rank}
+                        {rank === 1 ? <Crown aria-hidden="true" /> : <span aria-hidden="true">{rank}</span>}
                       </span>
                       <Avatar p={p} />
                       <span className="leaderboardPlayer">
@@ -1266,7 +1371,8 @@ export default function App() {
       .sort((a, b) => +new Date(b.e.at) - +new Date(a.e.at));
 
     return (
-      <main className="app">
+      <main className="app hauntedTheme gothicPages hauntedDecorated">
+        <HauntedDecorations />
         <Header title={game ? "Score history" : "Game history"} back={!!game} />
         <section>
           {game ? (
@@ -1330,7 +1436,8 @@ export default function App() {
   // ---------- Game settings ----------
   if (view === "settings" && game) {
     return (
-      <main className="app settingsScreen">
+      <main className="app hauntedTheme settingsScreen gothicPages hauntedDecorated">
+        <HauntedDecorations />
         <Header title="Game settings" />
         <section className="settingsContent">
           <p className="settingsIntro">Fine-tune the options for this match.</p>
@@ -1403,11 +1510,28 @@ export default function App() {
     );
   }
 
+  // ---------- Throne Room ----------
+  if (view === "throne" && game) {
+    const { winners, kneelingPlayers } = rankPlayers(game.players);
+
+    return (
+      <ThroneRoom
+        title={game.title}
+        mode={game.mode}
+        winners={winners}
+        kneelingPlayers={kneelingPlayers}
+        onReturnToResults={() => setView("results")}
+        onStartNewGame={() => {
+          setSelected(undefined);
+          newGame();
+        }}
+      />
+    );
+  }
+
   // ---------- Results ----------
   if (view === "results" && game) {
-    const ranked = [...game.players].sort((a, b) => b.score - a.score);
-    const highScore = ranked[0].score;
-    const winners = ranked.filter((p) => p.score === highScore);
+    const { ranked, highScore, winners } = rankPlayers(game.players);
 
     // Start a new game with the same players and settings
     const playAgain = () => {
@@ -1431,7 +1555,7 @@ export default function App() {
     };
 
     return (
-      <main className="app">
+      <main className="app hauntedTheme">
         <Header title="Game results" back={false} />
         <section className="results">
           <div className="winner">
@@ -1479,7 +1603,8 @@ export default function App() {
     ];
 
     return (
-      <main className="app">
+      <main className="app hauntedTheme gothicPages hauntedDecorated">
+        <HauntedDecorations />
         <Header title="Statistics" back={false} />
         <section>
           <div className="stats">
@@ -1517,22 +1642,17 @@ export default function App() {
   const activeCount = games.filter((g) => g.status === "active").length;
 
   return (
-    <main className="app">
-      <Header title="Your scorebook" back={false} />
+    <main className="app hauntedTheme gothicPages hauntedDecorated">
+      <HauntedDecorations />
+      <Header title="Wordkeeper" back={false} />
       <section className="home">
-        {/* Hero banner */}
         <div className="dashboardHero">
           <div className="heroCopy">
-            <small>READY TO PLAY?</small>
-            <h2>
-              Your next word
-              <br />
-              wins.
-            </h2>
-            <p>
-              Keep every score, turn, and triumphant triple-word finish in one beautifully simple
-              scorebook.
-            </p>
+            <button className="hauntedBadge" type="button" onClick={clickHauntedBadge}>
+              HALLOWEEN SPECIAL
+            </button>
+            <h2>WORDKEEPER</h2>
+            <p>The game never truly ends.</p>
             <button className="primary heroAction" onClick={newGame}>
               <span>
                 <Plus />
@@ -1542,23 +1662,24 @@ export default function App() {
             </button>
           </div>
 
-          <div className="tilePanel" aria-hidden="true">
-            <i className="tile tileW">
-              W<sup>4</sup>
-            </i>
-            <i className="tile tileO">
-              O<sup>1</sup>
-            </i>
-            <i className="tile tileR">
-              R<sup>1</sup>
-            </i>
-            <i className="tile tileD">
-              D<sup>2</sup>
-            </i>
-            <span>
-              MAKE EVERY
-              <br />
-              WORD COUNT
+          <div className="hauntedScene">
+            <span className="hauntedMoon" aria-hidden="true" />
+            <span className="hauntedMansion" aria-hidden="true" />
+            <span className="hauntedTree hauntedTreeLeft" aria-hidden="true" />
+            <span className="hauntedTree hauntedTreeRight" aria-hidden="true" />
+            <span className="hauntedSceneGhost" aria-hidden="true">👻</span>
+            <button
+              className="hauntedPumpkin"
+              type="button"
+              onClick={clickPumpkin}
+              aria-label="A hidden message. Click three times to reveal it."
+              title="A little secret from the house"
+            >
+              <span aria-hidden="true">✦</span>
+            </button>
+            <span className="hauntedSceneCaption" aria-hidden="true">
+              GATHER AT DUSK
+              <b>WORDS AFTER DARK</b>
             </span>
           </div>
         </div>
@@ -1621,7 +1742,7 @@ export default function App() {
       </section>
 
       <Nav />
-      {toast && <div className="toast">{toast}</div>}
+      {toast && <div className="toast" role="status" aria-live="polite">{toast}</div>}
     </main>
   );
 }
