@@ -80,7 +80,7 @@ type View =
 
 const STORAGE_KEY = "scrabble-score-v2";
 const COLORS = ["#c66551", "#4b927f", "#c89835", "#6e79b5", "#a35c91"];
-const MAX_PLAYERS = 5;
+const MAX_PLAYERS = 8;
 const ANIMAL_AVATARS = [
   "https://images.unsplash.com/photo-1552053831-71594a27632d",
   "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
