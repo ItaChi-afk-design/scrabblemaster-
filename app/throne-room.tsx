@@ -35,14 +35,14 @@ export function ThroneRoom({
   const [soundAvailable, setSoundAvailable] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [soundError, setSoundError] = useState("");
-  const audioContext = useRef<AudioContext | null>(null);
+  const laughAudio = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotionPreference = () => setReducedMotion(motionPreference.matches);
     const preferenceTimer = window.setTimeout(() => {
       updateMotionPreference();
-      setSoundAvailable(typeof window.AudioContext !== "undefined");
+      setSoundAvailable(Boolean(laughAudio.current?.canPlayType("audio/mpeg")));
     }, 0);
     motionPreference.addEventListener("change", updateMotionPreference);
 
@@ -66,33 +66,6 @@ export function ThroneRoom({
     };
   }, [replay, reducedMotion]);
 
-  useEffect(() => {
-    return () => {
-      void audioContext.current?.close();
-    };
-  }, []);
-
-  const playSound = useCallback(
-    (frequency: number, duration: number, volume: number) => {
-      const context = audioContext.current;
-      if (!soundEnabled || !context || context.state !== "running") return;
-
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      const now = context.currentTime;
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(frequency, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(volume, now + 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(now);
-      oscillator.stop(now + duration);
-    },
-    [soundEnabled],
-  );
-
   const playersByScore = [...winners, ...kneelingPlayers];
   const monarch = winners[0];
   const courtPlayers = playersByScore.filter((player) => player.id !== monarch.id);
@@ -102,8 +75,43 @@ export function ThroneRoom({
     rank: index + 1,
   }));
 
+  const playLaugh = useCallback(async () => {
+    const audio = laughAudio.current;
+    if (!audio) return;
+
+    audio.volume = 1;
+    try {
+      await audio.play();
+      setSoundEnabled(true);
+      setSoundError("");
+    } catch (error) {
+      setSoundEnabled(false);
+      setSoundError(
+        error instanceof DOMException && error.name === "NotAllowedError"
+          ? "Autoplay was blocked. Tap Enable laughter to play the sound."
+          : error instanceof Error
+            ? `Laughter sound could not be played: ${error.message}`
+            : "Laughter sound could not be played.",
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    const audio = laughAudio.current;
+    if (!audio) return;
+
+    void playLaugh();
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [playLaugh]);
+
   const toggleSound = async () => {
     if (soundEnabled) {
+      const audio = laughAudio.current;
+      audio?.pause();
+      if (audio) audio.currentTime = 0;
       setSoundEnabled(false);
       return;
     }
@@ -113,29 +121,12 @@ export function ThroneRoom({
       return;
     }
 
-    try {
-      const context = audioContext.current ?? new window.AudioContext();
-      audioContext.current = context;
-      await context.resume();
-      setSoundEnabled(true);
-      setSoundError("");
-    } catch (error) {
-      setSoundEnabled(false);
-      setSoundError(
-        error instanceof Error ? `Sound could not be enabled: ${error.message}` : "Sound could not be enabled.",
-      );
-    }
+    await playLaugh();
   };
-
-  useEffect(() => {
-    if (!soundEnabled) return;
-    if (stage === "throne") playSound(110, 0.9, 0.12);
-    if (stage === "ruler") playSound(392, 0.7, 0.08);
-    if (stage === "kneeling") playSound(262, 0.55, 0.06);
-  }, [stage, soundEnabled, playSound]);
 
   return (
     <main className="app hauntedTheme throneRoomApp">
+      <audio ref={laughAudio} src="/psycho_Bj24m2M.mp3" preload="auto" hidden aria-hidden="true" />
       <div className="throneRoomShell">
         <section
           className="throneRoomScene"
@@ -148,7 +139,7 @@ export function ThroneRoom({
             onClick={() => void toggleSound()}
             disabled={!soundAvailable}
             aria-pressed={soundEnabled}
-            aria-label={soundEnabled ? "Mute reveal sound" : "Enable reveal sound"}
+            aria-label={soundEnabled ? "Mute laughter sound" : "Enable laughter"}
           >
             {soundEnabled ? <Volume2 /> : <VolumeX />}
             <span>{soundAvailable ? (soundEnabled ? "Sound on" : "Sound off") : "Sound unavailable"}</span>
@@ -212,6 +203,11 @@ export function ThroneRoom({
             onClick={() => {
               setStage("dark");
               setReplay((value) => value + 1);
+              if (soundEnabled) {
+                const audio = laughAudio.current;
+                if (audio) audio.currentTime = 0;
+                void playLaugh();
+              }
             }}
           >
             <RotateCcw /> Replay reveal
