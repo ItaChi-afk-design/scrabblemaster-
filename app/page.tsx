@@ -509,6 +509,8 @@ export default function App() {
   const active = games.find((g) => g.status === "active");
   const gameRef = useRef<Game | undefined>(undefined);
   const audioContext = useRef<AudioContext | null>(null);
+  // Prevent the same countdown number from being announced more than once.
+  const lastSpokenSecond = useRef<number | null>(null);
   const finishDialogRef = useRef<HTMLDialogElement>(null);
 
   // Replace a game with an updated copy
@@ -553,6 +555,8 @@ export default function App() {
       if (!context) return;
 
       const play = () => {
+        if (secondsLeft > 0 && secondsLeft <= 10) return;
+
         const oscillator = context.createOscillator();
         const gain = context.createGain();
         const now = context.currentTime;
@@ -629,6 +633,40 @@ export default function App() {
     },
     [say],
   );
+
+  // Speak the final countdown number using the device's installed English voice.
+  // Voice availability varies by browser and operating system; pitch/rate create
+  // a deeper, more dramatic delivery when the selected voice supports them.
+  const speakCountdownNumber = useCallback((secondsLeft: number) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    const synthesis = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(String(secondsLeft));
+    const voices = synthesis.getVoices();
+
+    const englishVoices = voices.filter((voice) =>
+      voice.lang.toLowerCase().startsWith("en"),
+    );
+    const preferredVoice =
+      englishVoices.find((voice) =>
+        /male|david|guy|mark|daniel|james|alex|fred/i.test(voice.name),
+      ) ?? englishVoices[0];
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+      utterance.lang = preferredVoice.lang;
+    } else {
+      utterance.lang = "en-US";
+    }
+
+    utterance.rate = 0.86;
+    utterance.pitch = 0.58;
+    utterance.volume = 1;
+
+    // Replace any queued speech so announcements never stack up.
+    synthesis.cancel();
+    synthesis.speak(utterance);
+  }, []);
 
   /* ---------- Effects ---------- */
 
@@ -713,14 +751,26 @@ export default function App() {
       const elapsed = Math.floor((now - current.lastTick) / 1000);
       const secondsLeft = current.remaining - elapsed;
 
-      // Still time left: play a tick and update the clock
+      // Still time left: play the existing tick and update the clock.
       if (secondsLeft > 0) {
         playTimerSound(secondsLeft);
+
+        // Announce 10 through 1 once each. Reset above 10 so every new turn
+        // gets its own countdown, including custom 10-second turns.
+        if (secondsLeft > 10) {
+          lastSpokenSecond.current = null;
+        } else if (secondsLeft <= 10 && lastSpokenSecond.current !== secondsLeft) {
+          speakCountdownNumber(secondsLeft);
+          lastSpokenSecond.current = secondsLeft;
+        }
+
         patch(current.id, (g) => tickTimedGame(g, now));
         return;
       }
 
-      // Time's up: buzz, stop, and pause briefly before the next turn
+      // Time's up: stop speech, keep the existing buzz, then pause briefly.
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      lastSpokenSecond.current = null;
       playTimerSound();
       patch(current.id, (g) => ({
         ...g,
@@ -731,8 +781,20 @@ export default function App() {
       }));
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [game?.id, game?.running, game?.mode, game?.status, playTimerSound]);
+    return () => {
+      clearInterval(interval);
+      // Stop any spoken number if the timer is paused, closed, or switched.
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      lastSpokenSecond.current = null;
+    };
+  }, [
+    game?.id,
+    game?.running,
+    game?.mode,
+    game?.status,
+    playTimerSound,
+    speakCountdownNumber,
+  ]);
 
   // After the "time's up" pause, move on to the next player
   useEffect(() => {
