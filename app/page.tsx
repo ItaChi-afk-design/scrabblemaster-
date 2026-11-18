@@ -862,11 +862,10 @@ export default function App() {
       return setError(`A game can have up to ${MAX_PLAYERS} players.`);
     }
 
-    const names = draft.players.map((p) => p.name.trim());
-    const hasEmptyName = names.some((n) => !n);
+    const names = draft.players.map((p, i) => p.name.trim() || `Player ${i + 1}`);
     const hasDuplicate = new Set(names.map((n) => n.toLowerCase())).size !== names.length;
 
-    if (hasEmptyName || hasDuplicate) {
+    if (hasDuplicate) {
       return setError("Use a different name for each player.");
     }
 
@@ -1124,7 +1123,7 @@ export default function App() {
                     ...draft.players,
                     {
                       id: uid(Date.now()),
-                      name: `Player ${draft.players.length + 1}`,
+                      name: "",
                       color: COLORS[draft.players.length % COLORS.length],
                       avatarUrl: getRandomAnimalAvatar(draft.players),
                       score: 0,
